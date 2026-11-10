@@ -7,6 +7,7 @@ rating: "{{RATING}}" # ★★★★★
 started: {{START_DATE}}
 finished: {{FINISH_DATE}}
 mindmap: "./mindmap.xmind"
+references: "./references/" # 若提供全书电子书原文（txt/md/pdf），AI将开启前瞻性原文感知伴读
 tags:
   - {{TAG_1}}
   - {{TAG_2}}
@@ -53,7 +54,8 @@ graph TD
 ---
 
 ## 🧭 教练阶梯式思考罗盘 (Evolving Socratic Compass)
-> 动态进化机制：随着章节的推进，AI 在每次归档后在此抛出 1~2 个针对下一阶段的深度思考题，作为进入下一章的认知支架。
+> 动态进化机制：随着章节的推进，AI 在每次归档后在此抛出 1~2 个针对下一阶段的深度思考题。
+> 若提供了 `references/` 原文，AI 将开启【原文感知模式】，结合后文伏笔给出具有穿透力且避免恶性剧透的前瞻性启发题。
 
 ### 阶段 1：读前与宏观框架
 - [x] **思考题 1**：作者试图解决什么根本矛盾？全书分成了哪几大支柱来论证？

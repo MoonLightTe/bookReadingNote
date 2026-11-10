@@ -11,7 +11,9 @@
 3. **分章精读与导读中枢**：
    - 严肃/大部头专著：采用独立书籍目录，分章记为 `ch0X-xxx.md`，由目录下的 `README.md` 担任总结与导读中枢。
    - 通识/轻量书：支持单文件快速记录。
-4. **思维导图作为常驻单一事实源 (Living Mindmaps)**：持续更新的思维导图位于 `reading/live-assets/` 或直接安置于对应书籍目录下，绝不作为一次性草稿归档或切片。
+4. **思维导图与原文资产作为常驻单一事实源**：
+   - 持续更新的思维导图位于书籍目录（`mindmap.xmind`），绝不作为一次性草稿归档或切片。
+   - **全书原文支持 (Full-Text References)**：支持在 `books/<category>/<book-name>/references/` 下存放整本书电子书或长文本。当存在原文时，Agent 将自动开启【原文感知前瞻模式】，结合后文伏笔与当前阅读进度，在 `guide.md` 动态提出更具穿透力的建设性思考题。常见大文件格式已在 `.gitignore` 过滤。
 
 ---
 
@@ -31,7 +33,7 @@ bookReadingNote/
 │   └── topic-synthesis-template.md     # 跨书主题研讨卡片模板
 ├── reading/                            # 🚀 纯粹临时输入缓冲区（归档后彻底清空，Inbox Zero）
 ├── books/                              # 📚 正式书籍库（按宽泛领域平铺，自治内聚）
-│   ├── tech/                           # 技术、工程、架构（含导读 guide.md、思维导图与章节）
+│   ├── tech/                           # 技术、工程、架构（含导读 guide.md、思维导图、references/与章节）
 │   ├── thinking/                       # 思维模型、认知、方法论
 │   ├── management/                     # 管理、商业、组织协作
 │   └── humanities/                     # 人文、社科、历史哲学

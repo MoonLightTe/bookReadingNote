@@ -17,3 +17,11 @@ Thumbs.db
 # 临时缓存
 *.tmp
 *.log
+
+# 大体积电子书与二进制书籍原文（防止 git 仓库臃肿，本地保留供 AI 读取）
+*.pdf
+*.epub
+*.mobi
+*.azw3
+*.djvu
+
