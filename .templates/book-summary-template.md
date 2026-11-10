@@ -6,7 +6,7 @@ status: "{{STATUS}}" # reading | finished | abandoned
 rating: "{{RATING}}" # ★★★★★
 started: {{START_DATE}}
 finished: {{FINISH_DATE}}
-mindmap: "{{MINDMAP_PATH}}" # 例如 ./mindmap.xmind 或 ../../../reading/live-assets/xxx.xmind
+mindmap: "./mindmap.xmind"
 tags:
   - {{TAG_1}}
   - {{TAG_2}}
@@ -35,14 +35,11 @@ graph TD
 
 ## 🧭 导读建议与阅读路径 (Reading Guide)
 
-* **初学者 / 30分钟快速了解**：
+* **极速通读（建议 1~2 周）**：
   - 重点阅读：[第 1 章](./ch01-xxx.md)、全书终章总结
   - 核心关注：作者的根本假设与解决的问题范式
-* **实战开发者 / 针对性攻坚**：
-  - 重点阅读：[第 X 章](./ch0X-xxx.md)、[第 Y 章](./ch0Y-xxx.md)
-  - 核心关注：工程实现权衡与实操踩坑
-* **选读与跳过建议**：
-  - 说明哪些章节数学/理论推导偏多，可按需选读。
+* **攻坚与实战重点**：
+  - 重点阅读：[第 X 章](./ch0X-xxx.md)
 
 ---
 
@@ -55,8 +52,17 @@ graph TD
 
 ---
 
-## ❓ 全书研讨与未决疑问库 (Questions & Inquiries Backlog)
-> 本模块由 `note-archiver` 自动汇总自各章节的疑问与批判性反思，作为二轮复盘或实战验证的研究课题。
+## 🧭 教练阶梯式思考罗盘 (Evolving Socratic Compass)
+> 动态进化机制：随着章节的推进，AI 在每次归档后在此抛出 1~2 个针对下一阶段的深度思考题，作为进入下一章的认知支架。
+
+### 阶段 1：读前与宏观框架
+- [x] **思考题 1**：作者试图解决什么根本矛盾？全书分成了哪几大支柱来论证？
+- [ ] **思考题 2（动态生成）**：{{EVOLVING_QUESTION_1}}
+
+---
+
+## ❓ 读者研读与未决疑问库 (Questions & Inquiries Backlog)
+> 本模块由 `note-archiver` 自动汇总自读者草稿中的疑惑、批判性反思与未解技术点。
 
 ### 来自第 1 章：
 - [ ] **疑问 1**：{{Q1}}
