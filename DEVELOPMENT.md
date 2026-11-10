@@ -111,7 +111,21 @@ tags:
 
 ---
 
-## 6. TODOs 与演进规划
+## 6. Git 版本控制与维护准则
+
+1. **分支策略**：个人知识库默认基于 `main` 主干开发。
+2. **提交规范 (Conventional Commits)**：
+   - `feat(book):` 新书/新章节笔记归档（例如 `feat(ddia): archive ch02 notes`）
+   - `docs(topic):` 主题研讨卡片或导读更新
+   - `refactor(skill):` 优化或进化专属 Skill
+   - `chore:` 调整看板、更新模板或配置
+3. **安全与纯粹性**：
+   - `.gitignore` 过滤系统缓存（`.DS_Store`）与编辑器配置。
+   - 所有归档内容保持为通用 Markdown 与标准二进制导图，严禁将专有工具私有缓存提交进仓库。
+
+---
+
+## 7. TODOs 与演进规划
 
 - [x] 初始化目录骨架与规范文档 `DEVELOPMENT.md`
 - [x] 创建标准化模板 (`chapter-template.md`, `book-summary-template.md`, `topic-synthesis-template.md`)
@@ -120,3 +134,4 @@ tags:
 - [x] 实现并部署 `reading-coach` 专属技能（支持艾德勒四大阅读层级与跨书主题研讨）
 - [x] 端到端多书混合归档与领域拓扑演练（实测验证通过）
 - [x] 建立 Skill 持续演进与反馈闭环机制
+- [x] 初始化 Git 仓库并完成首个工程提交 (main branch)
