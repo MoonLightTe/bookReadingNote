@@ -31,6 +31,16 @@
   - [费孝通]《乡土中国》
   - [金一南]《苦难辉煌》
 
+#### 🎮 硬核工程实战：Web 3D 游戏引擎与极客单文件开发 (24周)
+> **学习模式**：读写做合一，读一章经典（GAMES101/WebGL/RTR4），造一个可运行的轮子。
+> 详情参见实战任务总控台：[👉 进入实战任务库](./learning-tasks/webgl-fps-engine/README.md)
+
+- [ ] **阶段一 · 数学筑基与 WebGL2 管线**（读《GAMES101》第1-4讲 + 手写 3D 数学核与软件光栅化）
+- [ ] **阶段二 · GLSL 着色器与 PBR 渲染**（读《The Book of Shaders》+ 手写雨夜潮湿沥青与 PCSS 软阴影）
+- [ ] **阶段三 · FPS 核心引擎与敌人 AI**（读《游戏编程模式》+ 手写武器后坐力手感与 FSM 状态机）
+- [ ] **阶段四 · 程序化音频与 Demoscene 建模**（读 Web Audio API 规范 + 纯代码振荡器合成枪声与 HUD 投影）
+- [ ] **阶段五 · 极限压缩与单文件封包**（Vite/Rollup 极客打包 + 产出独立 350KB 离线 3A 原型）
+
 ---
 
 ### 🏆 已读归档 (Finished Archive)
@@ -42,6 +52,7 @@
 
 ## 🧭 知识库快速导航
 
+- **🛠️ 硬核工程任务库**：[🎮 Web 3D 实战任务库 (`learning-tasks/webgl-fps-engine/`)](./learning-tasks/webgl-fps-engine/README.md)
 - **临时草稿区**：[`reading/drafts/`](./reading/drafts/)（阅读时随手记）
 - **持续思维导图**：[`reading/live-assets/`](./reading/live-assets/)（全书长线演进脑图）
 - **书籍归档库**：
