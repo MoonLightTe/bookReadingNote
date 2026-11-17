@@ -18,7 +18,8 @@ argument-hint: "[--quick | --deep | --qa] [--dry-run]"
 > 3. **资产全局可召回 (Retrievability & Stable ID)**：所有衍生的 Q&A、金句卡片、实战任务、概念冲突必须打上**稳定 ID、场景标签、来源锚点与生命周期状态**（`unresolved | in_progress | verified | closed`），严禁产生无法检索调用的死资产。
 > 4. **收件箱清零与原件存底 (Inbox Zero & Provenance)**：执行落库后，`reading/` 缓冲区恢复清空（仅留 `.gitkeep`）；原始草稿完整移入 `archive/raw-notes/YYYY-MM/`，严格保证可追溯性。
 > 5. **资产自治与幂等性 (Idempotence & Multi-Asset)**：图片与多媒体附件自动收归 `books/.../assets/` 并重构 Markdown 相对链接。重复对同一章节触发归档必须具备幂等性，**NEVER** 生成重复的 Q&A 编号、重复图片或冗余金句。
-> 6. **跨书争议留存 (Preserve Syntopical Conflicts)**：当新书观点与库内已有书籍发生根本矛盾时，**MUST** 生成 `CONFLICT-` 争议卡，严禁强行拉平或抹杀认知张力。
+> 6. **Mermaid 零错误转正铁律 (Safe Mermaid Guard)**：落库时若发现草稿中包含旧式 `mindmap` 或裸括号/特殊字符节点，**MUST** 自动平滑重构为全平台兼容的 `graph LR` 并为节点添加 `["..."]` 字符串保护，确保入库笔记零渲染报错。
+> 7. **跨书争议留存 (Preserve Syntopical Conflicts)**：当新书观点与库内已有书籍发生根本矛盾时，**MUST** 生成 `CONFLICT-` 争议卡，严禁强行拉平或抹杀认知张力。
 
 ---
 

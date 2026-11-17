@@ -89,6 +89,24 @@ tags:
 
 ---
 
+## 3.1 Mermaid 图表工业级兼容规范 (Mermaid Guidelines)
+
+为确保图表在所有 Markdown 预览器（VS Code、GitHub、Obsidian、Typora、网页端）中 100% 毫秒级稳定渲染，杜绝解析崩溃，全库遵循以下硬性准则：
+
+1. **禁用实验性语法 (STRICTLY PROHIBITED)**：
+   - **严禁使用 `mindmap`**：对空格缩进极其神经质，且中英文括号 `( )` 会与节点形状关键字严重冲突，导致解析崩溃；
+   - **严禁使用 `gitGraph`** 等冷门图表。
+2. **全库工业标准类型 (PREFERRED TYPES)**：
+   - **树状与知识结构**：统一使用 `graph LR` 或 `flowchart LR`（从左至右自然展开）；
+   - **业务流程与阶段推进**：统一使用 `graph TD` 或 `flowchart TD`（从上至下）；
+   - **生命周期与状态机**：统一使用 `stateDiagram-v2`。
+3. **节点防御包裹铁律 (DEFENSIVE QUOTING)**：
+   - **所有节点内容必须用方括号+双引号严密包裹**：`node_id["显示文本内容"]`；
+   - 只要用 `["..."]` 包裹，文本内的冒号 `:`、中英文括号 `()`、斜杠 `/`、减号 `-` 等均被解析器作为纯文本字符串（String Literal）安全处理，彻底免疫语法冲突；
+   - 节点 ID 保持纯英文字符或编号（如 `root`, `n1`, `n1_1`），逻辑 ID 与展示文本解耦。
+
+---
+
 ## 4. 章节启航工作流 (reading-coach Kickoff Workflow)
 
 当读者准备进入新章节（发送“开始读第 X 章”或“带我读第 X 章”）时：
