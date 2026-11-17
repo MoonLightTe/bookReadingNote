@@ -27,6 +27,8 @@ bookReadingNote/
 │       │   └── SKILL.md
 │       └── note-archiver/              # 自动化归档、领域梳理与原件存底（多书批量分流）
 │           └── SKILL.md
+├── .agents/
+│   └── skills/                         # ZCode 原生 Skill 发现目录（reading-coach / note-archiver 副本，任一侧修改必须双向同步）
 ├── .templates/                         # 标准化模板
 │   ├── chapter-template.md             # 章节精读模板
 │   ├── book-summary-template.md        # 全书导读中枢模板 (guide.md)
@@ -154,6 +156,12 @@ tags:
 3. **版本演进铁律**：
    - 技能修改必须做到行为可预期、平滑兼容既有目录结构；
    - 每次 Skill 新增或调整能力，必须同步更新本文档的“目录结构”与“核心逻辑”。
+
+### 外部 Skill 工具箱（用户级 `~/.agents/skills/`，2026-11-15 部署）
+
+- **`learn`**：结构化自主学习教练（6 阶段 14 步学习科学方法论，已适配中文触发词与本仓库 `learning-tasks/`、`references/` 结构）。用于跨会话的学习进度调度与检索复习，与 reading-coach（单章领读）形成长短线互补。
+- **cc-thinking-skills 选装 5 项**：`thinking-systems`（系统动力学，对口 DDIA）、`thinking-probabilistic`（概率思维，对口《思考，快与慢》）、`thinking-steel-manning`（先立最强反方，补强批判维度）、`thinking-first-principles`（第一性原理，对口引擎造轮子）、`thinking-pre-mortem`（事前验尸，对口阶段验收）。均为**手动点名调用**（`disable-model-invocation: true`），不参与自动触发。
+- 上述工具属个人用户级环境，不提交本仓库；在本库深读时可显式点名配合使用。
 
 ---
 
