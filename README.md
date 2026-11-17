@@ -31,6 +31,12 @@
   - [费孝通]《乡土中国》
   - [金一南]《苦难辉煌》
 
+#### 🎙️ 表达与讲书人刻意练习：输出倒逼输入实战 (Presenter Drills)
+> **学习模式**：将阅读技巧转化为肌肉记忆，拒绝只读不练。
+> 详情参见讲书任务总控台：[👉 进入表达任务库](./learning-tasks/presenter-drills/README.md)
+
+- [ ] **打卡 01 · 五星吸引力微讲书卡片**（读《成为讲书人》第 2 章 + 装配悬念/互动/转折/金句/自嘲产出 250 字卡片）[👉 开始打卡](./learning-tasks/presenter-drills/task01-ch02-five-weapons-card.md)
+
 #### 🎮 硬核工程实战：Web 3D 游戏引擎与极客单文件开发 (24周)
 > **学习模式**：读写做合一，读一章经典（GAMES101/WebGL/RTR4），造一个可运行的轮子。
 > 详情参见实战任务总控台：[👉 进入实战任务库](./learning-tasks/webgl-fps-engine/README.md)
@@ -52,6 +58,7 @@
 
 ## 🧭 知识库快速导航
 
+- **💎 灵感金句与认知矩阵**：[💎 金句索引库 (`topics/quotes-matrix.md`)](./topics/quotes-matrix.md)（按场景调用的经典摘抄与提炼模型）
 - **🛠️ 硬核工程任务库**：[🎮 Web 3D 实战任务库 (`learning-tasks/webgl-fps-engine/`)](./learning-tasks/webgl-fps-engine/README.md)
 - **临时草稿区**：[`reading/drafts/`](./reading/drafts/)（阅读时随手记）
 - **持续思维导图**：[`reading/live-assets/`](./reading/live-assets/)（全书长线演进脑图）

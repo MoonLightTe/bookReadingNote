@@ -38,9 +38,11 @@ bookReadingNote/
 │   ├── management/                     # 管理、商业、组织协作
 │   └── humanities/                     # 人文、社科、历史哲学
 ├── topics/                             # 🌐 领域全景与主题阅读研讨区 (Syntopical Reading)
-│   └── README.md                       # 全局领域标签拓扑矩阵
+│   ├── README.md                       # 全局领域标签拓扑矩阵
+│   └── quotes-matrix.md                # 💎 灵感金句与认知索引矩阵 (场景化检索与调用)
 ├── learning-tasks/                     # 🛠️ 硬核工程与造轮子实战任务库（读写结合、代码落地）
-│   └── webgl-fps-engine/               # Web 3D 游戏引擎与极客单文件开发实战（5大阶段分章打卡）
+│   ├── webgl-fps-engine/               # Web 3D 游戏引擎与极客单文件开发实战（5大阶段分章打卡）
+│   └── presenter-drills/               # 🎙️ 表达与讲书人刻意练习任务库 (MVP打卡卡片)
 ├── archive/                            # 🗄️ 归档留痕库
 │   └── raw-notes/                      # 原始草稿存底（按 YYYY-MM 归档，不可逆防丢）
 ├── assets/                             # 全局静态图床/附件
@@ -100,17 +102,25 @@ tags:
 
 ## 5. 自动化归档技能工作流 (note-archiver Workflow)
 
-当调用 `note-archiver` 技能时，系统将遵循以下流水线：
-1. **多书扫描与识别**：读取 `reading/` 中的全部文件（多份草稿与导图），按书名和领域自动分组。
-2. **格式规范化**：按 `.templates/chapter-template.md` 重构排版与各模块（导读问题、核心提炼、批判反思）。
-3. **疑问抽取与动态导读维护**：
-   - 提取草稿中记录的未知问题或疑惑，追加到书籍主 `guide.md` 的【读者未决疑问库】。
-   - **动态进阶导读机制 (Living Guide)**：归档时结合本章结论与下一章预告，在【教练阶梯思考罗盘】动态生成 1~2 个深度思考题，铺设认知阶梯。
-   - 更新章节索引表与一句话精要。
-4. **书籍自治内聚**：将思维导图移入书籍专属目录（`mindmap.xmind`），并联动更新 `guide.md` 章节索引表。
-5. **领域拓扑更新**：提取书籍 Tags，同步更新 `topics/README.md` 的领域矩阵。
-6. **原件不可逆存底与清空**：将原始草稿完整移入 `archive/raw-notes/YYYY-MM/`，确保 `reading/` 彻底清空 (Inbox Zero)。
-7. **全局看板更新**：更新根目录 `README.md` 中的在读进度。
+当调用 `note-archiver` 技能时，系统将遵循**“认知优先、模式分级、资产可召回”**流水线：
+
+1. **三档模式路由 (Mode Routing)**：
+   - `--quick`（快速收纳）：静默搬移资产，疑问列为待办建议，不打断心流；
+   - `--deep`（深度熔炼）：认知解惑先行，执行 Socratic Q&A 研讨沉淀与金句萃取；
+   - `--qa`（纯探讨追问）：针对指定章节追加 `Q(N+1)` 研讨留痕，不清空缓冲区。
+2. **依据溯源与读者主权 (Cognitive Sovereignty)**：
+   - AI 解答必须严格区分 `[📖 原书事实]`、`[🤖 AI 推演]`、`[💡 读者洞察]`，拒绝幻觉；
+   - 嗅探出的金句与任务默认处于 `proposed`（建议稿）状态，经读者确认后方可转正。
+3. **资产全局可召回与状态机 (Retrievability & State Engine)**：
+   - 所有 Q&A、金句、实战任务分配全局稳定 ID（如 `QA-PRESENTER-CH02-01`、`Q-MIND-01`）；
+   - 标注生命周期状态：`unresolved | in_progress | verified | closed`；
+   - 规范参见 [.gemini/skills/note-archiver/references/retrieval-spec.md](./.gemini/skills/note-archiver/references/retrieval-spec.md)。
+4. **书籍与多媒体资产内聚 (Multi-Asset Cohesion)**：
+   - 将思维导图（`mindmap.xmind`）及配图自动移入书籍专属目录（`books/.../assets/`），并重构 Markdown 本地相对链接。
+5. **跨书争议留存 (Preserve Syntopical Conflicts)**：
+   - 当多本书在同一问题产生根本分歧时，生成 `CONFLICT-` 争议卡，保留认知张力。
+6. **原件不可逆存底与收件箱清零**：将原始草稿完整移入 `archive/raw-notes/YYYY-MM/`，确保 `reading/` 彻底清空 (Inbox Zero)。
+7. **全局看板更新**：更新根目录 `README.md` 中的在读进度与实战任务导航。
 
 ---
 
@@ -153,4 +163,10 @@ tags:
 - [x] 端到端多书混合归档与领域拓扑演练（实测验证通过）
 - [x] 建立 Skill 持续演进与反馈闭环机制
 - [x] 初始化 Git 仓库并完成首个工程提交 (main branch)
+- [x] 搭建 `learning-tasks/webgl-fps-engine/` 5大阶段硬核造轮子实战任务库（读写做合一）
+- [x] 搭建 `learning-tasks/presenter-drills/` 讲书人表达刻意练习打卡任务库
+- [x] 初始化 `topics/quotes-matrix.md` 场景化金句与认知索引矩阵 (收录12条核心金句)
+- [x] 基于第一性原理全面重塑 `note-archiver 2.0`（模式分级、依据溯源、资产稳定ID与生命周期状态机）
+- [x] 完成《成为讲书人》ch00、ch01、ch02 历史资产全量对齐与 Socratic Q&A 研讨沉淀
+- [ ] 推进《成为讲书人》第 3 章“如何精准传递书中的信息”研读 (阶梯思考题 5 已就绪)
 - [x] 搭建 `learning-tasks/webgl-fps-engine/` 5大阶段硬核造轮子实战任务库（读写做合一）
