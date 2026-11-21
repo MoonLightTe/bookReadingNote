@@ -1,0 +1,16 @@
+/* Markdown Preview Enhanced (Crossnote) Workspace Custom CSS */
+.markdown-preview.markdown-preview {
+  .mermaid {
+    /* 解决 SVG foreignObject 硬裁剪 */
+    foreignObject {
+      overflow: visible !important;
+    }
+
+    /* 保证文字字号与 Mermaid 计算基准严格一致，防止渲染字号偏大冲出边框 */
+    .nodeLabel, .label {
+      font-size: 13px !important;
+      line-height: 1.4 !important;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif !important;
+    }
+  }
+}

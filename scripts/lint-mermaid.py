@@ -31,6 +31,10 @@ def check_file(path):
             continue
 
         if in_mermaid:
+            # Skip directive comments like %%{init: ...}%%
+            if stripped.startswith("%%"):
+                continue
+
             if diagram_type is None and stripped:
                 diagram_type = stripped.split()[0]
                 if diagram_type == "mindmap":

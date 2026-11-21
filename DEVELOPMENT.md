@@ -106,6 +106,28 @@ tags:
    - **所有节点内容必须用方括号+双引号严密包裹**：`node_id["显示文本内容"]`；
    - 只要用 `["..."]` 包裹，文本内的冒号 `:`、中英文括号 `()`、斜杠 `/`、减号 `-` 等均被解析器作为纯文本字符串（String Literal）安全处理，彻底免疫语法冲突；
    - 节点 ID 保持纯英文字符或编号（如 `root`, `n1`, `n1_1`），逻辑 ID 与展示文本解耦。
+4. **中文文本截断防护 (CJK Truncation Defense)**：
+   - **成因**：Mermaid 在计算 SVG 节点包围盒（`getBBox()`）时基于英文字体指标，导致 CJK 中文字宽实际渲染超出计算宽度；配合 SVG `<foreignObject>` 默认裁剪，造成右侧文字被切。
+   - **文档层防线（原生无依赖）**：
+     - 在图表顶部注入指令声明中文字体、折行宽度与边距：`%%{init: {'flowchart': {'htmlLabels': true, 'wrappingWidth': 300, 'padding': 20}, 'themeVariables': {'fontSize': '13px', 'fontFamily': 'PingFang SC, sans-serif'}}}%%`；
+     - 长文本节点合理使用 `<br/>` 换行（单行控制在 8-12 个汉字以内）。
+   - **环境层防线（MPE / Crossnote 引擎）**：
+     - 现代 MPE (v0.8+) 底层采用 Crossnote，macOS 全局配置位于 `~/.local/state/crossnote/style.less`（工作区可置于 `.crossnote/style.less`）：
+       ```less
+       .markdown-preview.markdown-preview {
+         .mermaid {
+           foreignObject { overflow: visible !important; }
+           .nodeLabel, .label {
+             font-size: 13px !important;
+             line-height: 1.4 !important;
+             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif !important;
+           }
+         }
+       }
+       ```
+   - **信息架构防线（克制原则）**：
+     - 严禁在思维导图或架构图节点中强行塞入 15 字以上的长句子或解释段落；
+     - 节点文本严控在 4~10 个汉字精炼骨架词以内，详细解释和案例下沉至正文分析或 Socratic 探针中。
 
 ---
 
