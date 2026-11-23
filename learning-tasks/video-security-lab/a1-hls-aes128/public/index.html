@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HLS AES-128 加密播放器</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 40px auto;
+            max-width: 860px;
+            padding: 0 20px;
+            background: #0f172a;
+            color: #f8fafc;
+        }
+        h2 { border-bottom: 1px solid #334155; padding-bottom: 12px; }
+        .player-container { margin: 20px 0; background: #000; border-radius: 8px; overflow: hidden; }
+        video { width: 100%; display: block; }
+        .log-panel {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #94a3b8;
+            height: 120px;
+            overflow-y: auto;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            background: #0284c7;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h2>HLS AES-128 加密播放安全实验室 (Stage 1)</h2>
+    <div class="status-badge" id="status">正在加载播放器...</div>
+
+    <div class="player-container">
+        <video id="video" controls autoplay playsinline></video>
+    </div>
+
+    <h3>播放器网络与事件日志</h3>
+    <div class="log-panel" id="logs"></div>
+
+    <script>
+        const video = document.getElementById('video');
+        const statusEl = document.getElementById('status');
+        const logsEl = document.getElementById('logs');
+        const videoSrc = '/video/index.m3u8';
+
+        function log(msg) {
+            const time = new Date().toLocaleTimeString();
+            logsEl.innerHTML += `[${time}] ${msg}<br>`;
+            logsEl.scrollTop = logsEl.scrollHeight;
+        }
+
+        if (Hls.isSupported()) {
+            const hls = new Hls({
+                xhrSetup: function (xhr, url) {
+                    // 当请求命中 /api/key 时，拦截并注入认证凭证
+                    if (url.includes('/api/key')) {
+                        log('拦截密钥请求，注入 Authorization: Bearer secret_token_123');
+                        xhr.setRequestHeader('Authorization', 'Bearer secret_token_123');
+                    }
+                }
+            });
+
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+
+            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                statusEl.innerText = 'Manifest 解析成功，开始解密播放';
+                statusEl.style.background = '#10b981';
+                log('HLS.js 准备就绪，自动开始播放');
+                video.play().catch(e => log('等待用户交互后起播'));
+            });
+
+            hls.on(Hls.Events.ERROR, function (event, data) {
+                if (data.fatal) {
+                    statusEl.innerText = '播放致命错误: ' + data.type;
+                    statusEl.style.background = '#ef4444';
+                    log('Fatal Error: ' + JSON.stringify(data));
+                }
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+        } else {
+            statusEl.innerText = '当前浏览器不支持 HLS';
+            statusEl.style.background = '#ef4444';
+        }
+    </script>
+</body>
+</html>

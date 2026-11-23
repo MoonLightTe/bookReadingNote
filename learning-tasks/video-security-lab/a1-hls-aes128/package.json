@@ -1,0 +1,13 @@
+{
+  "name": "a1-hls-aes128-demo",
+  "version": "1.0.0",
+  "description": "HLS AES-128 Encryption & Red Team Decryption Lab",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}
