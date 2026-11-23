@@ -1,0 +1,85 @@
+topic: "LearnHub 核心引擎轻量造轮子实战"
+final_goal: "在 scripts/learnhub_engine.py 中手写交付零重型依赖的 LearnHub 核心引擎轮子（支持：Markdown 原子结构保护分块器 + 本地向量与关键词 RRF 检索器 + Diff 确认安全写回工具），并通过自动化测试套件"
+daily_budget_min: 60
+explicit_cut_list:
+  - "本期明确跳过 Java / Spring Boot 运行时与后端服务框架"
+  - "本期明确跳过 MySQL 8 / Milvus / Docker 容器中间件部署，使用纯文件或本地 SQLite"
+  - "本期明确跳过 Vue 3 / Tiptap Web 图形界面开发，全部采用 CLI / JSON / 终端 Diff"
+  - "本期明确跳过模型微调与训练，向量获取采用标准轻量 API 或轻量本地库"
+nodes:
+  - id: "N1"
+    title: "Markdown 原子结构保护分块器 (Structural Chunker)"
+    stage: "fundamentals"
+    prereqs: []
+    status: "ready"
+    difficulty: "high"
+    observable_output: "运行单测，验证包含多行 LaTeX 公式($$...$$)、代码围栏(```)、Markdown表格的示例文档，输出分块时原子结构完整保留未被截断，且输出包含段落层级与字符预算"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N2"
+    title: "向量几何投影与纯数学余弦相似度计算 (Vector & Cosine Sim)"
+    stage: "fundamentals"
+    prereqs: []
+    status: "ready"
+    difficulty: "medium"
+    observable_output: "不使用黑盒库，纯手写数学点积与模长计算余弦相似度函数，对标准测试向量输出误差小于 1e-6，并能对分块生成简单的嵌入缓存"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N3"
+    title: "本地轻量关键词倒排检索 (Keyword Inverted Index / BM25)"
+    stage: "building_blocks"
+    prereqs: []
+    status: "ready"
+    difficulty: "medium"
+    observable_output: "使用 Python 内置 sqlite3 (FTS5) 或手写简易倒排索引，对文档集执行精确词与专有名词查询，返回排名前 K 个命中片段与分词高亮范围"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N4"
+    title: "双通道倒数排名融合算法 (Reciprocal Rank Fusion - RRF)"
+    stage: "building_blocks"
+    prereqs: ["N2", "N3"]
+    status: "locked"
+    difficulty: "high"
+    observable_output: "实现 RRF(k=60) 融合打分，输入关键词与向量两组独立检索打分列表，输出消除评分量纲差异后的综合排序结果，并能清晰展示各自通道贡献"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N5"
+    title: "内容哈希基准校验与 Diff 预览安全写回 (Targeted Note Edit)"
+    stage: "building_blocks"
+    prereqs: ["N1"]
+    status: "locked"
+    difficulty: "high"
+    observable_output: "基于 SHA-256 计算目标小节内容哈希，若文档被外界意外修改则抛出冲突异常；变更成功时生成统一标准 unified diff 文本并要求确认后再落盘"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N6"
+    title: "统一单文件轻量引擎 CLI (scripts/learnhub_engine.py)"
+    stage: "real_application"
+    prereqs: ["N1", "N4", "N5"]
+    status: "locked"
+    difficulty: "high"
+    observable_output: "命令行执行 python scripts/learnhub_engine.py chunk / search / edit 均可正常响应，零第三方 C 扩展依赖，完全自包含"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N7"
+    title: "本仓库真实书籍笔记端到端索引与回归验证"
+    stage: "real_application"
+    prereqs: ["N6"]
+    status: "locked"
+    difficulty: "medium"
+    observable_output: "使用该引擎对 books/ 目录下的真实技术笔记与 references/ 进行索引，执行多通道检索并成功生成一次定向修改 Diff，测试通过"
+    weak_points: []
+    review_stage: 0
+    next_review: null

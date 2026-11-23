@@ -27,9 +27,12 @@ bookReadingNote/
 │       │   └── SKILL.md
 │       ├── note-archiver/              # 自动化归档、领域梳理与原件存底（多书批量分流）
 │       │   └── SKILL.md
-│       └── mastery-planner/            # 🎯 硬核学习架构师（DAG依赖图、工时微步、费曼门禁与状态机）
+│       ├── mastery-planner/            # 🎯 硬核学习架构师（DAG依赖图、工时微步、费曼门禁与状态机）
+│       │   ├── SKILL.md
+│       │   └── references/design-spec.md # 架构决策规范原件 (Rationale & Trade-offs)
+│       └── nyx/                        # 🌌 深度思考与提示语路由总督（45件精炼法宝矩阵、辨证引路与全域接力）
 │           ├── SKILL.md
-│           └── references/design-spec.md # 架构决策规范原件 (Rationale & Trade-offs)
+│           └── references/             # 7 大场景法宝原文（一字不改强约束库）
 ├── .agents/
 │   └── skills/                         # ZCode 原生 Skill 发现目录（与 .gemini/skills 保持双向镜像同步）
 ├── .templates/                         # 标准化模板
@@ -46,6 +49,7 @@ bookReadingNote/
 │   ├── README.md                       # 全局领域标签拓扑矩阵
 │   └── quotes-matrix.md                # 💎 灵感金句与认知索引矩阵 (场景化检索与调用)
 ├── learning-tasks/                     # 🛠️ 硬核工程与造轮子实战任务库（读写结合、代码落地，自治内聚 study-state.yaml）
+│   ├── learnhub-engine/                # 🔍 LearnHub 核心引擎轻量造轮子实战（原子切片、向量与 RRF 检索、Diff 写入确认）
 │   ├── webgl-fps-engine/               # 🎮 Web 3D 游戏引擎开发实战（5大阶段分章打卡，解耦并发 DAG）
 │   ├── presenter-drills/               # 🎙️ 表达与讲书人刻意练习任务库 (MVP打卡卡片)
 │   └── video-security-lab/             # 🛡️ 视频加密与防盗录攻防实战任务库（三阶红蓝对抗天梯）
@@ -172,11 +176,12 @@ tags:
 
 ## 5. Skill 持续演进与自愈机制 (Skill Evolution & Feedback Loop)
 
-为保证知识库专属 Skills（`reading-coach`、`note-archiver` 与 `mastery-planner`）保持生命力并根据用户的阅读习惯持续进化，建立以下演进机制：
+为保证知识库专属 Skills（`reading-coach`、`note-archiver`、`mastery-planner` 与 `nyx`）保持生命力并根据用户的阅读习惯持续进化，建立以下演进机制：
 
 1. **健康体检与审计**：
-   - 随时通过 `/yuex-skill-doctor mastery-planner`、`/yuex-skill-doctor note-archiver` 或 `/yuex-skill-doctor reading-coach` 触发全面健康诊断，对照 14 项铁律排查弱化措辞、缺失边界等缺陷；
-   - `mastery-planner` 的架构决策原件、7大范式融合裁决与第一性原理推演见 [.gemini/skills/mastery-planner/references/design-spec.md](./.gemini/skills/mastery-planner/references/design-spec.md)。
+   - 随时通过 `/yuex-skill-doctor mastery-planner`、`/yuex-skill-doctor note-archiver`、`/yuex-skill-doctor reading-coach` 或 `/yuex-skill-doctor nyx` 触发全面健康诊断，对照 14 项铁律排查弱化措辞、缺失边界等缺陷；
+   - `mastery-planner` 的架构决策原件、7大范式融合裁决与第一性原理推演见 [.gemini/skills/mastery-planner/references/design-spec.md](./.gemini/skills/mastery-planner/references/design-spec.md)；
+   - `nyx`（夜之女神）作为全库思考中枢与提示语总督，维护 45 件精炼法宝矩阵（32 原生思考提示词 + 7 进阶工程技能 + 6 社区顶级法宝），恪守“原提示词逐字不改”与“对不上就说对不上”铁律，并在思考方案成熟后，精准接力至 `reading-coach`（精读）、`mastery-planner`（代码实战规划）或 `note-archiver`（金句沉淀）。
 2. **渐进式反馈沉淀 (Feedback Archive)**：
    - 当日常使用中发现归档分类有误、疑问提取不够敏锐或排版不符合偏好时，直接提出纠偏指令；
    - 触发反馈归档，将修正案例沉淀为 Skill 的 `Few-Shot Examples`（黄金标准样例）。
@@ -223,4 +228,6 @@ tags:
 - [x] 完成《成为讲书人》ch00、ch01、ch02 历史资产全量对齐与 Socratic Q&A 研讨沉淀
 - [x] 设计并部署 `mastery-planner` 硬核学习规划技能（融合 DAG 拓扑、代码微步、费曼门禁与状态机）
 - [x] 全面打通 `learning-tasks/` 状态机架构：完成 `video-security-lab`、`webgl-fps-engine` 与 `presenter-drills` 的 DAG 拓扑重构与 `study-state.yaml` 导入
+- [x] 设计、转化并部署 `nyx`（夜之女神）思考与提示语路由总督（收录 45 件核心法宝矩阵，打通 reading-coach、mastery-planner 与 note-archiver 接力链）
 - [ ] 推进《成为讲书人》第 3 章“如何精准传递书中的信息”研读 (阶梯思考题 5 已就绪)
+- [ ] 推进 `learnhub-engine` 核心引擎轮子开发（N1 结构保护原子分块器与本地检索）
