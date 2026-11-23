@@ -25,10 +25,13 @@ bookReadingNote/
 │   └── skills/
 │       ├── reading-coach/              # 深度阅读领读与主题研讨教练（读前/读中/跨书引导）
 │       │   └── SKILL.md
-│       └── note-archiver/              # 自动化归档、领域梳理与原件存底（多书批量分流）
-│           └── SKILL.md
+│       ├── note-archiver/              # 自动化归档、领域梳理与原件存底（多书批量分流）
+│       │   └── SKILL.md
+│       └── mastery-planner/            # 🎯 硬核学习架构师（DAG依赖图、工时微步、费曼门禁与状态机）
+│           ├── SKILL.md
+│           └── references/design-spec.md # 架构决策规范原件 (Rationale & Trade-offs)
 ├── .agents/
-│   └── skills/                         # ZCode 原生 Skill 发现目录（reading-coach / note-archiver 副本，任一侧修改必须双向同步）
+│   └── skills/                         # ZCode 原生 Skill 发现目录（与 .gemini/skills 保持双向镜像同步）
 ├── .templates/                         # 标准化模板
 │   ├── chapter-template.md             # 章节精读模板
 │   ├── book-summary-template.md        # 全书导读中枢模板 (guide.md)
@@ -44,7 +47,8 @@ bookReadingNote/
 │   └── quotes-matrix.md                # 💎 灵感金句与认知索引矩阵 (场景化检索与调用)
 ├── learning-tasks/                     # 🛠️ 硬核工程与造轮子实战任务库（读写结合、代码落地）
 │   ├── webgl-fps-engine/               # Web 3D 游戏引擎与极客单文件开发实战（5大阶段分章打卡）
-│   └── presenter-drills/               # 🎙️ 表达与讲书人刻意练习任务库 (MVP打卡卡片)
+│   ├── presenter-drills/               # 🎙️ 表达与讲书人刻意练习任务库 (MVP打卡卡片)
+│   └── video-security-lab/             # 🛡️ 视频加密与防盗录攻防实战任务库（商用DRM、盲水印与内核逆向对抗）
 ├── archive/                            # 🗄️ 归档留痕库
 │   └── raw-notes/                      # 原始草稿存底（按 YYYY-MM 归档，不可逆防丢）
 ├── assets/                             # 全局静态图床/附件
@@ -168,10 +172,11 @@ tags:
 
 ## 5. Skill 持续演进与自愈机制 (Skill Evolution & Feedback Loop)
 
-为保证知识库专属 Skills（`reading-coach` 与 `note-archiver`）保持生命力并根据用户的阅读习惯持续进化，建立以下演进机制：
+为保证知识库专属 Skills（`reading-coach`、`note-archiver` 与 `mastery-planner`）保持生命力并根据用户的阅读习惯持续进化，建立以下演进机制：
 
 1. **健康体检与审计**：
-   - 随时通过 `/yuex-skill-doctor note-archiver` 或 `/yuex-skill-doctor reading-coach` 触发全面健康诊断，对照 14 项铁律排查弱化措辞、缺失边界等缺陷。
+   - 随时通过 `/yuex-skill-doctor mastery-planner`、`/yuex-skill-doctor note-archiver` 或 `/yuex-skill-doctor reading-coach` 触发全面健康诊断，对照 14 项铁律排查弱化措辞、缺失边界等缺陷；
+   - `mastery-planner` 的架构决策原件、7大范式融合裁决与第一性原理推演见 [.gemini/skills/mastery-planner/references/design-spec.md](./.gemini/skills/mastery-planner/references/design-spec.md)。
 2. **渐进式反馈沉淀 (Feedback Archive)**：
    - 当日常使用中发现归档分类有误、疑问提取不够敏锐或排版不符合偏好时，直接提出纠偏指令；
    - 触发反馈归档，将修正案例沉淀为 Skill 的 `Few-Shot Examples`（黄金标准样例）。
@@ -216,5 +221,6 @@ tags:
 - [x] 初始化 `topics/quotes-matrix.md` 场景化金句与认知索引矩阵 (收录12条核心金句)
 - [x] 基于第一性原理全面重塑 `note-archiver 2.0`（模式分级、依据溯源、资产稳定ID与生命周期状态机）
 - [x] 完成《成为讲书人》ch00、ch01、ch02 历史资产全量对齐与 Socratic Q&A 研讨沉淀
+- [x] 设计并部署 `mastery-planner` 硬核学习规划技能（融合 DAG 拓扑、代码微步、费曼门禁与状态机）
 - [ ] 推进《成为讲书人》第 3 章“如何精准传递书中的信息”研读 (阶梯思考题 5 已就绪)
 - [x] 搭建 `learning-tasks/webgl-fps-engine/` 5大阶段硬核造轮子实战任务库（读写做合一）
