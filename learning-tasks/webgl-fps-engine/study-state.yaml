@@ -1,0 +1,62 @@
+topic: "Web 3D 游戏引擎与极客单文件开发 (webgl-fps-engine)"
+final_goal: "从零手写数学核、WebGL2 管线、物理碰撞、程序化音频，最终打包为 350KB 零外链、支持手柄的单 HTML 3A 极简 FPS 演示"
+daily_budget_min: 90
+explicit_cut_list:
+  - "引入 Three.js / Babylon.js 等成熟重量级商业引擎（必须纯手写 WebGL2 底层）"
+  - "加载外部超大 GLTF/FBX 模型包与 MP3 贴图（本期全部使用算法建模与 Web Audio 实时合成）"
+  - "多人网络同步与联机架构（单机体验至上，不碰 WebSocket 状态同步）"
+nodes:
+  - id: "W1"
+    title: "【数学与管线筑基】手写 3D 数学核与原生 WebGL2 渲染管线"
+    stage: "fundamentals"
+    prereqs: []
+    status: "ready"
+    difficulty: "high"
+    observable_output: "Vector3/Matrix4 单元测试 100% 通过；推导 LookAt 观察矩阵与透视投影矩阵；原生 WebGL2 成功绘制出带深度测试 (Z-buffer) 的自旋转纯色 3D 立方体"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "W2"
+    title: "【算法着色与 PBR】GLSL 纯代码程序化材质与软阴影"
+    stage: "building_blocks"
+    prereqs: ["W1"]
+    status: "locked"
+    difficulty: "high"
+    observable_output: "GLSL 片元中手写 2D Hash 与 FBM 分形噪声；实现微表面 Cook-Torrance BRDF；渲染出程序化雨夜沥青反射路面与 PCSS 软阴影，无外部贴图依赖"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "W3"
+    title: "【Gameplay 核心】次世代 FPS 手感控制器、碰撞检测与敌人 AI"
+    stage: "building_blocks"
+    prereqs: ["W1"]
+    status: "locked"
+    difficulty: "high"
+    observable_output: "PointerLock API 锁定鼠标；实现 smoothDamp 视角平滑与开镜 FOV 阻尼；完成 AABB 盒与射线碰撞检测；运行双状态巡逻/追击敌人 AI"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "W4"
+    title: "【程序化音频与极客建模】Web Audio 纯算法合成音效与 Demoscene 枪械"
+    stage: "building_blocks"
+    prereqs: ["W3"]
+    status: "locked"
+    difficulty: "medium"
+    observable_output: "Web Audio 振荡器与白噪声实时合成撞针气爆与枪鸣；代码几何挤出拼装出低多边形战术枪械并挂载开火后坐力弹簧；0 外部音频与模型文件"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "W5"
+    title: "【终极收网与封包】多端适配、Gamepad 手柄支持与 350KB 单 HTML 封包"
+    stage: "real_application"
+    prereqs: ["W2", "W3", "W4"]
+    status: "locked"
+    difficulty: "high"
+    observable_output: "W3C Gamepad API 接入 Xbox/PS 手柄带摇杆死区滤波；构建产出单个 index.html 且体积 <= 350KB；双击直接在无网络浏览器以 60fps 运行"
+    weak_points: []
+    review_stage: 0
+    next_review: null

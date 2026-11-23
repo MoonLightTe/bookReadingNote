@@ -1,6 +1,7 @@
-# Stage 5: Windows 内核只读枚举与回调完整性防御
+# Stage 5: Windows 内核只读枚举与回调完整性防御 (P3-L6)
 
-- **所属路线**：路线 B · 模块 B2
+- **所属路线**：Phase 3 · Level 6（系统内核终极加固）
+- **DAG 依赖**：前置为 `P2-L4A`（深刻理解 OpenProcess 与用户态注入威胁后，自顶向下进入内核防御）
 - **预计耗时**：3 周
 - **环境要求**：Windows 10 1703 虚拟机, 开启测试模式 (`bcdedit /set testsigning on`), 宿主机 VS2022+WDK, WinDbg 双机调试。
 

@@ -1,6 +1,7 @@
-# Stage 2: CENC 封装、DRM 代理与 OBS 硬件录屏防御
+# Stage 2: CENC 封装、DRM 代理与 OBS 硬件录屏防御 (P1-L2)
 
-- **所属路线**：路线 A · 模块 A2
+- **所属路线**：Phase 1 · Level 2（商用流媒体与硬件防录）
+- **DAG 依赖**：前置为 `P1-L1`（HLS AES-128 基础）
 - **预计耗时**：2 ~ 3 周
 - **环境要求**：Shaka Packager, Node.js, Chrome, Edge (Windows/macOS), OBS Studio。
 

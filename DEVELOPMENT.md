@@ -45,10 +45,10 @@ bookReadingNote/
 ├── topics/                             # 🌐 领域全景与主题阅读研讨区 (Syntopical Reading)
 │   ├── README.md                       # 全局领域标签拓扑矩阵
 │   └── quotes-matrix.md                # 💎 灵感金句与认知索引矩阵 (场景化检索与调用)
-├── learning-tasks/                     # 🛠️ 硬核工程与造轮子实战任务库（读写结合、代码落地）
-│   ├── webgl-fps-engine/               # Web 3D 游戏引擎与极客单文件开发实战（5大阶段分章打卡）
+├── learning-tasks/                     # 🛠️ 硬核工程与造轮子实战任务库（读写结合、代码落地，自治内聚 study-state.yaml）
+│   ├── webgl-fps-engine/               # 🎮 Web 3D 游戏引擎开发实战（5大阶段分章打卡，解耦并发 DAG）
 │   ├── presenter-drills/               # 🎙️ 表达与讲书人刻意练习任务库 (MVP打卡卡片)
-│   └── video-security-lab/             # 🛡️ 视频加密与防盗录攻防实战任务库（商用DRM、盲水印与内核逆向对抗）
+│   └── video-security-lab/             # 🛡️ 视频加密与防盗录攻防实战任务库（三阶红蓝对抗天梯）
 ├── archive/                            # 🗄️ 归档留痕库
 │   └── raw-notes/                      # 原始草稿存底（按 YYYY-MM 归档，不可逆防丢）
 ├── assets/                             # 全局静态图床/附件
@@ -222,5 +222,5 @@ tags:
 - [x] 基于第一性原理全面重塑 `note-archiver 2.0`（模式分级、依据溯源、资产稳定ID与生命周期状态机）
 - [x] 完成《成为讲书人》ch00、ch01、ch02 历史资产全量对齐与 Socratic Q&A 研讨沉淀
 - [x] 设计并部署 `mastery-planner` 硬核学习规划技能（融合 DAG 拓扑、代码微步、费曼门禁与状态机）
+- [x] 全面打通 `learning-tasks/` 状态机架构：完成 `video-security-lab`、`webgl-fps-engine` 与 `presenter-drills` 的 DAG 拓扑重构与 `study-state.yaml` 导入
 - [ ] 推进《成为讲书人》第 3 章“如何精准传递书中的信息”研读 (阶梯思考题 5 已就绪)
-- [x] 搭建 `learning-tasks/webgl-fps-engine/` 5大阶段硬核造轮子实战任务库（读写做合一）

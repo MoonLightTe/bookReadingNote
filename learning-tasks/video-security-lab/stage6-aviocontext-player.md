@@ -1,8 +1,16 @@
-# Stage 6: 私有 AVIOContext 内存解密播放器
+# Stage 6: 私有 AVIOContext 内存解密播放器 (P2-L4D)
 
-- **所属路线**：路线 B · 模块 B3
+- **所属路线**：Phase 2 · Level 4-Defense（蓝方筑防）
+- **DAG 依赖**：强依赖 `P2-L4A`（Stage 4 Frida 截流）；为 `P3-L5`（Stage 7 OLLVM 混淆）提供二进制代码载体
 - **预计耗时**：2 周
-- **环境要求**：C++, FFmpeg 开发库, OpenSSL, Process Monitor (ProcMon)。
+- **环境要求**：C++, FFmpeg 开发库 (libavformat / libavcodec), OpenSSL (AES-256-CTR), Process Monitor (ProcMon) 或 macOS fs_usage。
+
+---
+
+## 攻防对抗核心逻辑
+作为蓝方防守者，反制 Stage 4 (P2-L4A) 的截流威胁。
+通过私有 `AVIOContext` 将解密过程完全内聚在播放器内存回调中，做到**“分块按需解密、内存用完即抹（SecureZeroMemory）、全程绝对零落盘”**。
+**通关目标**：运行自己在 Stage 4 写出的 Frida 脚本，验证其无法在磁盘嗅探到明文缓存，且内存中的明文暴露窗口缩短至微秒级；拖动进度条无解码花屏。
 
 ---
 

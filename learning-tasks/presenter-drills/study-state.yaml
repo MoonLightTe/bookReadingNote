@@ -1,0 +1,29 @@
+topic: "表达与讲书人刻意练习任务库 (presenter-drills)"
+final_goal: "通过 15 分钟小步快跑组装核心表达零件，把《成为讲书人》的注意力抓取与信息传递内化为本能肌肉记忆"
+daily_budget_min: 30
+explicit_cut_list:
+  - "千字以上长篇宏大书评（只练 200~300 字微型认知切片）"
+  - "脱离作者底层模型的自由散漫发挥（熟练前严格按套模零件组装）"
+  - "无受众预判的自嗨式背书"
+nodes:
+  - id: "D1"
+    title: "【吸引力零件组装】五星吸引力微讲书卡片刻意练习 (MVP)"
+    stage: "fundamentals"
+    prereqs: []
+    status: "in_progress"
+    difficulty: "low"
+    observable_output: "挑选 1 个核心概念（如沉没成本/拖延症），严格按顺序装配【悬念钩子、心理互动、认知转折、核心金句、幽默自嘲】5大零件，字数 200~300 字，通过 5 维自检清单并在对话中提交"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "D2"
+    title: "【降维传递零件】视觉化隐喻与类比精准传递卡片"
+    stage: "building_blocks"
+    prereqs: ["D1"]
+    status: "locked"
+    difficulty: "medium"
+    observable_output: "针对 1 个高门槛专业术语（如分布式共识或时间复杂度），运用 FAB 结构与生活化视觉类比，输出一段无需任何技术前置即可听懂的 200 字通俗解释"
+    weak_points: []
+    review_stage: 0
+    next_review: null

@@ -1,6 +1,7 @@
-# Stage 3: 频域 DCT 水印与 ORB+RANSAC 透视校正
+# Stage 3: 频域 DCT 水印与 ORB+RANSAC 透视校正 (P1-L3)
 
-- **所属路线**：路线 A · 模块 A3
+- **所属路线**：Phase 1 · Level 3（事后盲溯源与抗屏摄攻击）
+- **DAG 依赖**：前置为 `P1-L1`（HLS AES-128 基础）
 - **预计耗时**：2 ~ 3 周
 - **环境要求**：Python 3.10+, OpenCV (`opencv-python`), NumPy, Matplotlib。
 

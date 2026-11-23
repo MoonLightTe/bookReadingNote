@@ -1,0 +1,93 @@
+topic: "视频加密与防盗录攻防实战任务库 (video-security-lab)"
+final_goal: "构建集 HLS/CENC、频域盲水印、内存零落盘播放器、二进制混淆与内核反截流于一体的三阶红蓝对抗实战体系"
+daily_budget_min: 90
+explicit_cut_list:
+  - "商业 Widevine L1 硬件私钥证书申请（本期聚焦 ClearKey、Local KMS 与 EME 协议交互）"
+  - "PPL 驱动签名绕过与内核漏洞利用 exploit（只做合法只读枚举安全检测，不走死胡同）"
+  - "第三方成熟外挂 UI 分析（只抓 Frida/OpenProcess 核心内存截流点）"
+nodes:
+  # =========================================================================
+  # Phase 1: 协议与流媒体传输层攻防 (Web / Python / macOS & Linux 通用)
+  # =========================================================================
+  - id: "P1-L1"
+    title: "【Level 1】HLS AES-128 全栈贯通与明文密钥失效边界"
+    stage: "fundamentals"
+    prereqs: []
+    status: "mastered"
+    difficulty: "medium"
+    observable_output: "成功运行 make slice 生成密文分片；VLC 播放单片报错；运行 scripts/rip_hls.py 成功抓取 Token、提取密钥还原出明文 recovered.mp4 并记录破解耗时"
+    weak_points: []
+    review_stage: 1
+    next_review: "2026-11-24"
+
+  - id: "P1-L2"
+    title: "【Level 2】CENC 封装、EME DRM 代理与 OBS 硬件防录"
+    stage: "building_blocks"
+    prereqs: ["P1-L1"]
+    status: "ready"
+    difficulty: "high"
+    observable_output: "Shaka Packager 产出 stream.mpd；Express.raw 代理双向无损转发二进制 License；Chrome 与 Edge 播放对比，OBS 录屏在 Edge 硬件路径下出现纯黑屏"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "P1-L3"
+    title: "【Level 3】频域 DCT 盲水印嵌入与 ORB+RANSAC 抗屏摄透视校正"
+    stage: "building_blocks"
+    prereqs: ["P1-L1"]
+    status: "ready"
+    difficulty: "high"
+    observable_output: "Python 脚本实现 Y 分量中频系数调制，原图 BER=0.00%；在 0°~40° 拍摄倾斜退化下，ORB+RANSAC 逆变换复原后 BER < 5% 并输出对比图表"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  # =========================================================================
+  # Phase 2: 客户端运行时与播放管线对抗 (C++ / FFmpeg / 内存攻防成对咬合)
+  # =========================================================================
+  - id: "P2-L4A"
+    title: "【Level 4-Attack】客户端内存读写对抗与 Frida 最后一公里截流"
+    stage: "building_blocks"
+    prereqs: ["P1-L1"]
+    status: "ready"
+    difficulty: "high"
+    observable_output: "C++ 注入程序成功读取目标内存；编写 Frida 脚本挂钩 avcodec_send_packet，从 AVPacket 裸指针流式 dump 出 dumped.h264 并封装为可用 MP4"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "P2-L4D"
+    title: "【Level 4-Defense】私有 AVIOContext 内存分块解密播放器 (击退 Frida 截流)"
+    stage: "real_application"
+    prereqs: ["P2-L4A"]
+    status: "locked"
+    difficulty: "high"
+    observable_output: "C++ 基于 FFmpeg libavformat 实现自定义 ReadPacket/Seek 回调，AES-256-CTR 按块内存解密且用完即擦；ProcMon 监控全程 0 临时文件写入且播放拖拽无花屏"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  # =========================================================================
+  # Phase 3: 二进制硬化与操作系统内核加固 (逆向 / 编译器 / 驱动安全终极防线)
+  # =========================================================================
+  - id: "P3-L5"
+    title: "【Level 5】OLLVM 代码混淆硬化与 1080p 60fps 性能淘汰红线"
+    stage: "real_application"
+    prereqs: ["P2-L4D"]
+    status: "locked"
+    difficulty: "medium"
+    observable_output: "分别编译无混淆、全平坦化、关键函数加固三个版本；IDA Pro 反编译查看控制流平坦化效果；实测 1080p 播放帧率下降 < 10% 确立淘汰红线"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "P3-L6"
+    title: "【Level 6】Windows 内核回调只读枚举与驱动完整性防御"
+    stage: "real_application"
+    prereqs: ["P2-L4A"]
+    status: "locked"
+    difficulty: "high"
+    observable_output: "Win10 测试模式驱动中只读快照 PsSetCreateProcessNotifyRoutine 回调表，比对 PsLoadedModuleList，成功告警未签名内存地址，WinDbg 查看无 BSOD"
+    weak_points: []
+    review_stage: 0
+    next_review: null

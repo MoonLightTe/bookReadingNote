@@ -1,8 +1,9 @@
-# Stage 7: OLLVM 代码混淆与 1080p 性能淘汰线
+# Stage 7: OLLVM 代码混淆与 1080p 性能淘汰线 (P3-L5)
 
-- **所属路线**：路线 B · 模块 B4
+- **所属路线**：Phase 3 · Level 5（二进制硬化与性能评测）
+- **DAG 依赖**：强依赖 `P2-L4D`（Stage 6 自研内存播放器，为其加固防逆向）
 - **预计耗时**：2 周
-- **环境要求**：支持 OLLVM 的 Clang 编译器, IDA Pro, 性能监控工具。
+- **环境要求**：支持 OLLVM 的 Clang 编译器（macOS/Linux/Win 均可编译）, IDA Pro / Ghidra, 性能基准测试工具。
 
 ---
 
