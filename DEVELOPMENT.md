@@ -30,6 +30,8 @@ bookReadingNote/
 │       ├── mastery-planner/            # 🎯 硬核学习架构师（DAG依赖图、工时微步、费曼门禁与状态机）
 │       │   ├── SKILL.md
 │       │   └── references/design-spec.md # 架构决策规范原件 (Rationale & Trade-offs)
+│       ├── quality-harness/            # 🛡️ Uncle Bob 质量门禁与自愈总督（双轨路由：--lean 极速 vs --deliver 严格）
+│       │   └── SKILL.md
 │       └── nyx/                        # 🌌 深度思考与提示语路由总督（45件精炼法宝矩阵、辨证引路与全域接力）
 │           ├── SKILL.md
 │           └── references/             # 7 大场景法宝原文（一字不改强约束库）
@@ -55,6 +57,13 @@ bookReadingNote/
 │   └── video-security-lab/             # 🛡️ 视频加密与防盗录攻防实战任务库（三阶红蓝对抗天梯）
 ├── archive/                            # 🗄️ 归档留痕库
 │   └── raw-notes/                      # 原始草稿存底（按 YYYY-MM 归档，不可逆防丢）
+├── scripts/                            # ⚙️ 自动化工具与质量门禁脚本库
+│   ├── mastery_state.py                # 🎯 Mastery Planner 状态流转机引擎 (拓扑自动解锁、复习调度与休眠预警)
+│   ├── verify-harness.sh               # 语言中立核心质量门禁调度器 (--quick / --deliver / --self-test)
+│   ├── adapters/                       # 跨技术栈适配器 (Java, Canary 等)
+│   │   ├── java.sh                     # Java 技术栈适配器 (Maven/Gradle + JUnit + JaCoCo + PITest)
+│   │   └── canary.sh                   # 金丝雀负向自检适配器 (坏用例拦截验证)
+│   └── lint-mermaid.py                 # Mermaid 图表语法与合规性检查器
 ├── assets/                             # 全局静态图床/附件
 ├── DEVELOPMENT.md                      # 系统架构、维护规范与 Skill 进化指南
 └── README.md                           # 全库总看板（正在阅读、待读、已读归档）
@@ -180,7 +189,7 @@ tags:
 
 1. **健康体检与审计**：
    - 随时通过 `/yuex-skill-doctor mastery-planner`、`/yuex-skill-doctor note-archiver`、`/yuex-skill-doctor reading-coach` 或 `/yuex-skill-doctor nyx` 触发全面健康诊断，对照 14 项铁律排查弱化措辞、缺失边界等缺陷；
-   - `mastery-planner` 的架构决策原件、7大范式融合裁决与第一性原理推演见 [.gemini/skills/mastery-planner/references/design-spec.md](./.gemini/skills/mastery-planner/references/design-spec.md)；
+   - `mastery-planner 2.0` 经 `yuex-skill-doctor` 审计重塑，全面引入 TDD 红灯测试脚手架、三阶阻抗降阶梯（机理剥离→最小反例→具象隐喻）、工时弹性三档位与顿悟交付契约，架构决策原件见 [.gemini/skills/mastery-planner/references/design-spec.md](./.gemini/skills/mastery-planner/references/design-spec.md)；
    - `nyx`（夜之女神）作为全库思考中枢与提示语总督，维护 45 件精炼法宝矩阵（32 原生思考提示词 + 7 进阶工程技能 + 6 社区顶级法宝），恪守“原提示词逐字不改”与“对不上就说对不上”铁律，并在思考方案成熟后，精准接力至 `reading-coach`（精读）、`mastery-planner`（代码实战规划）或 `note-archiver`（金句沉淀）。
 2. **渐进式反馈沉淀 (Feedback Archive)**：
    - 当日常使用中发现归档分类有误、疑问提取不够敏锐或排版不符合偏好时，直接提出纠偏指令；
@@ -229,5 +238,46 @@ tags:
 - [x] 设计并部署 `mastery-planner` 硬核学习规划技能（融合 DAG 拓扑、代码微步、费曼门禁与状态机）
 - [x] 全面打通 `learning-tasks/` 状态机架构：完成 `video-security-lab`、`webgl-fps-engine` 与 `presenter-drills` 的 DAG 拓扑重构与 `study-state.yaml` 导入
 - [x] 设计、转化并部署 `nyx`（夜之女神）思考与提示语路由总督（收录 45 件核心法宝矩阵，打通 reading-coach、mastery-planner 与 note-archiver 接力链）
+- [x] 经 `yuex-skill-doctor` 审计重构并升级 `mastery-planner 2.0`（引入 TDD 红灯脚手架、三阶阻抗降阶梯与顿悟交付契约）
+- [x] 实现并部署 Uncle Bob 自动化质量门禁核心骨架 (`scripts/verify-harness.sh` 语言中立调度器、Java Adapter 骨架、Canary 金丝雀负向自检与防测试篡改机制)
 - [ ] 推进《成为讲书人》第 3 章“如何精准传递书中的信息”研读 (阶梯思考题 5 已就绪)
 - [ ] 推进 `learnhub-engine` 核心引擎轮子开发（N1 结构保护原子分块器与本地检索）
+
+---
+
+## 8. Uncle Bob 自动化质量门禁体系 (Quality Harness Specification)
+
+本知识库与工程实战任务遵循 **Uncle Bob（罗伯特·C·马丁）代码质量门禁与自愈闭环哲学**，践行“将刚性留给机器指标，将弹性留给阈值与分层，门禁本身必须经受金丝雀检验”。
+
+### 8.1 三层解耦架构
+1. **指令层 (Skill / AGENTS.md)**：语言中立的行为说明书，约束 Agent 必须“写前出架构图、改完跑 quick、交付跑 deliver、看报错自愈、严禁改单测绕过”。
+2. **调度核心 (`scripts/verify-harness.sh`)**：语言中立调度器，负责：
+   - 自动扫描并激活项目对应的 `scripts/adapters/*.sh`；
+   - 负责快环 (`--quick`)、慢环 (`--deliver`) 与金丝雀自检 (`--self-test`) 调度；
+   - 执行 Git 测试防篡改检测（严禁未经授权删改已有断言）；
+   - 执行 CRAP 算法判定 ($comp^2 \times (1-cov)^3 + comp$)；
+   - 严格维护退出码契约（全绿 Exit 0，任何项失败 Exit 1）。
+3. **适配层 (`scripts/adapters/`)**：薄薄一层，封装具体技术栈工具差异：
+   - `java.sh`：Maven/Gradle + JUnit 5 + JaCoCo + PITest。
+   - `canary.sh`：注入典型坏用例（单测失败、CRAP=40.7 超标、变异体存活），供自检验证门禁未哑火。
+
+### 8.2 核心命令契约 (双轨制)
+```bash
+# 1. 日常极简极速模式 (5秒极速反馈: 单元测试 + 圈复杂度硬卡<=10 + 物理防改测试)
+./scripts/verify-harness.sh --lean
+
+# 2. 内环常规快速门禁 (每次代码改动后必跑: 单元测试 + CRAP 指标判定)
+./scripts/verify-harness.sh --quick
+
+# 3. 严格交付终审门禁 (发版交付前必跑: quick + 全量变异测试 + 生成 .harness/audit.json)
+./scripts/verify-harness.sh --deliver
+
+# 4. 金丝雀负向自检 (验证门禁本身是否具备拦截能力，绝不放行坏代码)
+./scripts/verify-harness.sh --self-test
+```
+
+### 8.3 专属配套技能 (`quality-harness`)
+- 位于 `.agents/skills/quality-harness/SKILL.md`（与 `.gemini/skills/` 保持镜像同步）；
+- 支持根据任务风险与规模自动或手动路由执行模式（`--lean` vs `--deliver`）；
+- 严格贯彻“契约前置出图 ➔ 测试锁定防篡改 ➔ 报错自愈循环 ➔ 交付签字卡片”闭环；
+- 配套知识架构专论详见：[`topics/clean-architecture-harness.md`](./topics/clean-architecture-harness.md)。

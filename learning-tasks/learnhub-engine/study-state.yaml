@@ -11,7 +11,7 @@ nodes:
     title: "Markdown 原子结构保护分块器 (Structural Chunker)"
     stage: "fundamentals"
     prereqs: []
-    status: "ready"
+    status: "in_progress"
     difficulty: "high"
     observable_output: "运行单测，验证包含多行 LaTeX 公式($$...$$)、代码围栏(```)、Markdown表格的示例文档，输出分块时原子结构完整保留未被截断，且输出包含段落层级与字符预算"
     weak_points: []

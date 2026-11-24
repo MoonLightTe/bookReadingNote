@@ -27,3 +27,14 @@ nodes:
     weak_points: []
     review_stage: 0
     next_review: null
+
+  - id: "D3"
+    title: "【行动催化零件】认知闭环与行动助推卡片 (Nudge Card)"
+    stage: "real_application"
+    prereqs: ["D2"]
+    status: "locked"
+    difficulty: "high"
+    observable_output: "针对所讲主题提炼出 1 个微小、可逆、今天就能执行的低阻力微动作，通过诱饵效应与损失厌恶公式，打消听众拖延并促成认知转变为真实行动"
+    weak_points: []
+    review_stage: 0
+    next_review: null
