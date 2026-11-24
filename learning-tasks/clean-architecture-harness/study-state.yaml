@@ -1,0 +1,91 @@
+topic: "Uncle Bob 质量门禁体系与 AI 协同实战"
+final_goal: "从零搭建具备单测对账、CRAP 探针、变异测试、防作弊、金丝雀自检的双轨门禁引擎，并驱动 AI 完成 3 次红灯自愈试金石"
+daily_budget_min: 60
+explicit_cut_list:
+  - "不手写复杂的 AST 词法编译器底层原理（复用工业级探针）"
+  - "不自研分布式多 Agent 调度编排平台（坚持单兵资深搭档模式）"
+  - "不碰复杂全量变异优化算法（只聚焦 PITest/Stryker 的集成与存活变异体消灭）"
+nodes:
+  - id: "N1"
+    title: "退出码契约与防假绿断言 (三重非零审计)"
+    stage: "fundamentals"
+    prereqs: []
+    status: "in_progress"
+    difficulty: "medium"
+    observable_output: "故意清空单测执行门禁，脚本必须精准识别 tests_run==0 并以 Exit 1 拦截，杜绝假绿。"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N2"
+    title: "测试锁定与防篡改硬拦截 (Anti-Tamper Lock)"
+    stage: "fundamentals"
+    prereqs: []
+    status: "ready"
+    difficulty: "low"
+    observable_output: "检测 Git diff，若已有单测断言被删改，check_anti_tamper 当场拦截中断并返回 Exit 1。"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N3"
+    title: "CRAP 状态机与圈复杂度探针"
+    stage: "building_blocks"
+    prereqs:
+      - "N1"
+      - "N2"
+    status: "locked"
+    difficulty: "high"
+    observable_output: "构造圈复杂度=8、覆盖率=20% 函数，计算器精准输出 CRAP=40.7 并触发 Gate 2 拦截。"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N4"
+    title: "变异测试接入与变异体消灭 (PITest/Stryker)"
+    stage: "building_blocks"
+    prereqs:
+      - "N3"
+    status: "locked"
+    difficulty: "high"
+    observable_output: "构造放行边界条件的隐蔽缺陷，变异器精准捕获 1 个存活变异体并阻断交付。"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N5"
+    title: "金丝雀自检防哑火自毁体系"
+    stage: "building_blocks"
+    prereqs:
+      - "N3"
+    status: "locked"
+    difficulty: "medium"
+    observable_output: "正常自检全绿；门禁规则被放水时自检当场暴雷（Canary Panic Exit）。"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N6"
+    title: "双轨模式分流与凭据落盘 (--lean / --deliver)"
+    stage: "real_application"
+    prereqs:
+      - "N4"
+      - "N5"
+    status: "locked"
+    difficulty: "medium"
+    observable_output: "执行 --deliver 顺利在 .harness/audit.json 生成带 Git 校验哈希与时间戳的防伪凭据。"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N7"
+    title: "三次真实红灯试金石验收 (Dogfooding Acceptance)"
+    stage: "real_application"
+    prereqs:
+      - "N6"
+    status: "locked"
+    difficulty: "high"
+    observable_output: "人类坐在旁边只读架构图，Agent 历经 3 次真实红灯自愈，最终交付签字卡片并验收通过。"
+    weak_points: []
+    review_stage: 0
+    next_review: null
