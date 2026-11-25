@@ -51,6 +51,7 @@ bookReadingNote/
 │   ├── README.md                       # 全局领域标签拓扑矩阵
 │   └── quotes-matrix.md                # 💎 灵感金句与认知索引矩阵 (场景化检索与调用)
 ├── learning-tasks/                     # 🛠️ 硬核工程与造轮子实战任务库（读写结合、代码落地，自治内聚 study-state.yaml）
+│   ├── eva-blog/                       # ⚡ EVA 战术终端风格个人技术博客实战（Astro 7 + Unified + MAGI 终端 + Pagefind）
 │   ├── learnhub-engine/                # 🔍 LearnHub 核心引擎轻量造轮子实战（原子切片、向量与 RRF 检索、Diff 写入确认）
 │   ├── webgl-fps-engine/               # 🎮 Web 3D 游戏引擎开发实战（5大阶段分章打卡，解耦并发 DAG）
 │   ├── presenter-drills/               # 🎙️ 表达与讲书人刻意练习任务库 (MVP打卡卡片)
@@ -242,6 +243,7 @@ tags:
 - [x] 实现并部署 Uncle Bob 自动化质量门禁核心骨架 (`scripts/verify-harness.sh` 语言中立调度器、Java Adapter 骨架、Canary 金丝雀负向自检与防测试篡改机制)
 - [ ] 推进《成为讲书人》第 3 章“如何精准传递书中的信息”研读 (阶梯思考题 5 已就绪)
 - [ ] 推进 `learnhub-engine` 核心引擎轮子开发（N1 结构保护原子分块器与本地检索）
+- [ ] 推进 `eva-blog` 个人技术博客实战（N1 架构设计与 Markdown 样式契约）
 
 ---
 

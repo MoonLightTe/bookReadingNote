@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="day">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EVA 主题博客 · 视觉稿</title>
+<script>
+/* 首屏防闪烁：首次绘制前按系统偏好落下主题标记 */
+document.documentElement.setAttribute('data-theme', matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day');
+</script>
+<style>
+/* ===== 1. Design Tokens ===== */
+:root{
+  --font-display:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  --font-body:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  --font-hud:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  --stripe:#F2C230;
+  --bar-h:56px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;--s8:64px;--s9:96px;
+}
+/* 昼：纸面 + 黑色标题卡 */
+html[data-theme="day"]{
+  color-scheme:light;
+  --bg:#F5F4F0;--surface:#FFFFFF;--ink:#111114;--muted:#5B5B66;--line:rgba(17,17,20,.16);
+  --purple:#711F8C;--on-purple:#FFFFFF;--green:#1F7A33;--green-fill:#52D053;--orange:#A3460A;--red:#C81E0C;
+  --purple-soft:rgba(113,31,140,.09);
+  --card-bg:#050507;--card-ink:#F5F4F0;--card-muted:#9C9CA8;--card-red:#FF4D42;--on-card-red:#050507;--card-purple:#B388EB;--card-green:#8BD450;
+}
+/* 夜：近黑纸面 + 白色标题卡 */
+html[data-theme="night"]{
+  color-scheme:dark;
+  --bg:#0B0B0E;--surface:#141418;--ink:#ECECF1;--muted:#9C9CA8;--line:rgba(236,236,241,.18);
+  --purple:#B388EB;--on-purple:#0B0B0E;--green:#8BD450;--green-fill:#8BD450;--orange:#FF9830;--red:#FF4D42;
+  --purple-soft:rgba(179,136,235,.14);
+  --card-bg:#F2F1EC;--card-ink:#0B0B0E;--card-muted:#5B5B66;--card-red:#C81E0C;--on-card-red:#FFFFFF;--card-purple:#711F8C;--card-green:#1F7A33;
+}
+
+/* ===== 2. Base ===== */
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;padding-top:var(--bar-h);background:var(--bg);color:var(--ink);font:400 17px/1.85 var(--font-body);-webkit-font-smoothing:antialiased;transition:background-color .25s var(--ease),color .25s var(--ease)}
+h1,h2,h3,h4,p,ol,ul,figure{margin:0}
+ol,ul{padding:0}
+a{color:var(--purple)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--purple);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding-left:var(--s5);padding-right:var(--s5)}
+.hud{font-family:var(--font-hud);font-size:12px;line-height:1.6;letter-spacing:.14em;text-transform:uppercase}
+.display{font-family:var(--font-display);font-weight:900}
+.led{display:inline-block;width:8px;height:8px;background:var(--green-fill);flex:none}
+.slash{color:var(--purple)}
+/* 滚动条双轨定制：WebKit 透明轨道细条 + Firefox 细条 */
+*{scrollbar-width:thin;scrollbar-color:var(--muted) transparent}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--muted);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--purple)}
+
+/* ===== 3. 视觉稿控制条（不属于站点设计） ===== */
+.ctl{position:fixed;top:0;left:0;right:0;z-index:60;height:var(--bar-h);display:flex;align-items:center;gap:var(--s4);padding:0 var(--s4);background:#1B1B21;color:#ECECF1;border-bottom:1px solid #3A3A44}
+.ctl-tag{font:700 12px var(--font-hud);letter-spacing:.18em;color:#FF9830;white-space:nowrap}
+.ctl-note{margin-right:auto;font:12px var(--font-hud);color:#9C9CA8;white-space:nowrap}
+.tabs{display:flex;gap:4px;margin-left:auto}
+.tab{min-height:40px;padding:0 14px;font:600 13px var(--font-body);color:#ECECF1;background:transparent;border:1px solid #3A3A44;cursor:pointer;transition:background-color .18s ease-out,color .18s ease-out,border-color .18s ease-out}
+.tab[aria-selected="true"]{background:#ECECF1;color:#111114;border-color:#ECECF1}
+.tab:hover{border-color:#9C9CA8}
+.ctl :focus-visible{outline-color:#8BD450}
+
+/* ===== 4. 站点导航 ===== */
+.site-nav{display:flex;align-items:center;justify-content:space-between;gap:0 var(--s4);min-height:88px;flex-wrap:wrap}
+.brand{display:inline-flex;align-items:center;gap:10px;min-height:44px;color:var(--ink);font-family:var(--font-display);font-weight:900;font-size:20px;line-height:1;letter-spacing:.06em;text-decoration:none}
+.nav-links{display:flex;align-items:center;gap:0 4px;list-style:none;flex-wrap:wrap}
+.nav-links a,.nav-links button{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 12px;border:0;background:none;color:var(--ink);font-family:var(--font-hud);font-size:12px;font-weight:600;letter-spacing:.14em;text-decoration:none;cursor:pointer;transition:color .18s ease-out,border-color .18s ease-out}
+.nav-links a:hover,.nav-links button:hover{color:var(--purple)}
+.nav-links [aria-current="page"]{color:var(--purple);text-decoration:underline;text-underline-offset:6px}
+.nav-links kbd{padding:0 5px;border:1px solid var(--line);color:var(--muted);font:inherit}
+.theme-btn{border:1px solid var(--line);color:var(--purple)}
+.theme-btn:hover{border-color:var(--purple)}
+
+/* ===== 5. 标题卡（Signature） ===== */
+.title-card{position:relative;display:grid;grid-template-rows:auto 1fr auto;gap:var(--s6);min-height:min(520px,66vh);padding:var(--s7) clamp(var(--s5),6vw,80px);background:var(--card-bg);color:var(--card-ink);transition:background-color .25s var(--ease),color .25s var(--ease)}
+.tc-top{display:flex;justify-content:space-between;gap:var(--s4);color:var(--card-muted)}
+.tc-ep{color:var(--card-red)}
+.tc-title{align-self:center;font-size:clamp(2.75rem,9vw,7.5rem);line-height:1.08;letter-spacing:.02em}
+.squeeze{display:inline-block;transform:scaleX(.84);transform-origin:0 50%}
+.punct{color:var(--card-green)}
+.tc-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:var(--s5) var(--s6);flex-wrap:wrap}
+.tc-no{color:var(--card-red);font-size:clamp(1.25rem,2.4vw,2rem);line-height:1}
+.tc-lede{max-width:34em;color:var(--card-muted);font-size:15px;line-height:1.8}
+.tc-meta{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s5);color:var(--card-muted)}
+.tc-tags{color:var(--card-purple)}
+/* 文章页头：同一张卡，收小一号 */
+.post-head{min-height:0;grid-template-rows:auto auto auto;gap:var(--s5);padding:var(--s7) clamp(var(--s5),5vw,64px)}
+.post-title{font-size:clamp(2rem,5.2vw,4.25rem)}
+
+/* ===== 6. 警示条分隔 ===== */
+.hazard-row{display:flex;align-items:center;gap:var(--s4);margin-top:var(--s7)}
+.hazard{flex:1;height:8px;background:repeating-linear-gradient(135deg,var(--stripe) 0 12px,var(--bg) 12px 24px)}
+.hazard-label{color:var(--muted);white-space:nowrap}
+.archive{padding-bottom:var(--s9)}
+
+/* ===== 7. 区块标题 / 标签 ===== */
+.sec-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s4) var(--s5);flex-wrap:wrap;margin:var(--s7) 0 var(--s3)}
+.sec-label{color:var(--ink);font-weight:600;letter-spacing:.16em}
+.sec-label .cn{margin-left:8px;color:var(--muted);letter-spacing:.2em}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:40px;padding:0 14px;border:1px solid var(--line);background:transparent;color:var(--ink);font-family:var(--font-hud);font-size:12px;font-weight:600;letter-spacing:.1em;cursor:pointer;transition:background-color .18s ease-out,color .18s ease-out,border-color .18s ease-out}
+.chip[aria-pressed="true"]{background:var(--purple);border-color:var(--purple);color:var(--on-purple)}
+.chip:hover{border-color:var(--purple)}
+
+/* ===== 8. 话数列表 ===== */
+.ep-list{list-style:none;border-top:1px solid var(--line)}
+.ep-row{position:relative;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"no date" "title title" "tags tags";gap:4px var(--s3);padding:var(--s4) 12px;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none;transition:background-color .18s ease-out,box-shadow .18s ease-out}
+.ep-no{grid-area:no;color:var(--orange)}
+.ep-date{grid-area:date;color:var(--muted)}
+.ep-title{grid-area:title;font-size:22px;line-height:1.4}
+.ep-tags{grid-area:tags;color:var(--muted)}
+.badge{display:inline-block;margin-left:12px;padding:1px 8px;background:var(--stripe);color:#0B0B0E;font-size:12px;line-height:1.6;letter-spacing:.14em;vertical-align:middle}
+.ep-empty{margin-top:var(--s5);color:var(--muted)}
+
+/* ===== 9. 索敌框（锁定角标） ===== */
+.lock::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .18s ease-out;background-image:linear-gradient(var(--green),var(--green)),linear-gradient(var(--green),var(--green)),linear-gradient(var(--green),var(--green)),linear-gradient(var(--green),var(--green)),linear-gradient(var(--green),var(--green)),linear-gradient(var(--green),var(--green)),linear-gradient(var(--green),var(--green)),linear-gradient(var(--green),var(--green));background-position:left top,left top,right top,right top,left bottom,left bottom,right bottom,right bottom;background-size:14px 2px,2px 14px,14px 2px,2px 14px,14px 2px,2px 14px,14px 2px,2px 14px;background-repeat:no-repeat}
+.ep-row.is-locked,.ep-row:hover,.ep-row:focus-visible{background:var(--surface);box-shadow:inset 3px 0 0 var(--purple)}
+.ep-row.is-locked::before,.ep-row:hover::before,.ep-row:focus-visible::before,.is-locked.lock::before{opacity:1}
+.ep-row.is-locked .ep-title,.ep-row:hover .ep-title,.ep-row:focus-visible .ep-title{color:var(--purple)}
+
+/* ===== 10. 文章页 ===== */
+.post-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s6);padding-top:var(--s8)}
+.post{min-width:0;max-width:720px}
+.post-body p{margin:0 0 1.5em}
+.post-body h2{position:relative;margin:2.6em 0 .9em;padding-left:16px;font-family:var(--font-display);font-weight:900;font-size:28px;line-height:1.35;letter-spacing:.01em;scroll-margin-top:calc(var(--bar-h) + 24px)}
+.post-body h2::before{content:"";position:absolute;left:0;top:.42em;width:5px;height:.95em;background:var(--green-fill)}
+.post-body ul{margin:0 0 1.5em;padding-left:1.4em}
+.post-body ol{margin:0 0 1.5em;padding-left:1.4em}
+.post-body li>ul,.post-body li>ol{margin:.2em 0}
+.post-body li>blockquote{margin:.4em 0}
+.post-body li{margin:.4em 0}
+.post-body li::marker{color:var(--purple)}
+.post-body a{color:var(--purple);text-decoration-line:underline;text-decoration-thickness:1px;text-underline-offset:5px;transition:text-decoration-thickness .15s ease-out}
+.post-body a:hover{text-decoration-thickness:2px}
+.post-body code:not(pre code){padding:.1em .4em;background:var(--purple-soft);color:var(--purple);font-family:var(--font-hud);font-size:.88em}
+/* MAGI 终端：代码块，两种主题下恒为深色 */
+.term{margin:2em 0;background:#0A0A12;border:1px solid #2A2A34;color:#E6E6EC}
+.term-bar{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);padding:8px 8px 8px 14px;border-bottom:1px solid #2A2A34;color:#9C9CA8}
+.term-path{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.term-copy{flex:none;min-height:32px;padding:0 10px;border:1px solid #3A3A44;background:#1B1B21;color:#ECECF1;font:600 12px var(--font-hud);letter-spacing:.12em;cursor:pointer;transition:border-color .18s ease-out,color .18s ease-out}
+.term-copy:hover{border-color:#8BD450}
+.term-copy.is-done{border-color:#8BD450;color:#8BD450}
+.term-copy.is-fail{border-color:#FF4D42;color:#FF4D42}
+.term-copy:focus-visible{outline-color:#8BD450}
+.term-lang{color:#FF9830}
+.term pre{margin:0;padding:18px 16px;overflow-x:auto;font:13px/1.8 var(--font-hud);tab-size:2;scrollbar-color:#5B5B66 transparent}
+.term pre::-webkit-scrollbar-thumb{background:#5B5B66}
+.term .c{color:#8A8A99}
+.term .k{color:#B388EB}
+.term .s{color:#8BD450}
+.term .f{color:#FF9830}
+/* 独白：引用块，随主题翻面 */
+.monologue{margin:2em 0;padding:var(--s5) var(--s6);border-left:4px solid var(--card-purple);background:var(--card-bg);color:var(--card-ink);transition:background-color .25s var(--ease),color .25s var(--ease)}
+.monologue figcaption{color:var(--card-red)}
+.monologue p{margin-top:12px;font-family:var(--font-display);font-weight:700;font-size:19px;line-height:1.7}
+/* 警示 callout */
+.callout{display:grid;grid-template-columns:8px minmax(0,1fr);gap:var(--s4);margin:2em 0;padding:var(--s4) var(--s5);border:1px solid var(--line);background:var(--surface)}
+.callout{--callout-color:var(--red)}
+.callout-note{--callout-color:var(--purple)}
+.callout-tip{--callout-color:var(--green)}
+.callout-important{--callout-color:var(--orange)}
+.callout-bar{background:var(--callout-color)}
+.callout-warning .callout-bar{background:repeating-linear-gradient(135deg,var(--stripe) 0 8px,#0B0B0E 8px 16px)}
+.callout-caution .callout-bar{background:repeating-linear-gradient(-45deg,#C81E0C 0 8px,#0B0B0E 8px 16px)}
+.callout-label{display:block;margin-bottom:4px;color:var(--callout-color)}
+/* 配图占位：锁定框 */
+.shot-img{display:grid;aspect-ratio:16 / 9;place-items:center;background:linear-gradient(135deg,var(--purple-soft),transparent 60%),var(--surface);color:var(--muted);font:600 13px var(--font-hud);letter-spacing:.24em}
+.shot figcaption{margin-top:10px;color:var(--muted)}
+/* 目录 */
+.toc{display:none}
+.toc-inline{margin-top:var(--s5);border:1px solid var(--line)}
+.toc-inline summary{display:flex;align-items:center;min-height:44px;padding:12px var(--s4);color:var(--ink);cursor:pointer;list-style:none}
+.toc-inline summary::-webkit-details-marker{display:none}
+.toc-inline summary::before{content:"+";margin-right:10px;color:var(--purple);font-family:var(--font-hud)}
+.toc-inline[open] summary::before{content:"−"}
+.toc-inline .toc-list{padding:0 var(--s4) var(--s3)}
+.toc-list{list-style:none;border-left:1px solid var(--line)}
+.toc-list a{position:relative;display:block;margin-left:-1px;padding:10px 12px 10px 20px;border-left:2px solid transparent;color:var(--muted);text-decoration:none;letter-spacing:.08em;transition:color .18s ease-out,border-color .18s ease-out,background-color .18s ease-out}
+.toc-list a:hover{background:var(--surface);color:var(--ink)}
+.toc-list a.is-active{border-left-color:var(--green);color:var(--ink)}
+.toc-list a.is-active::before{content:"▶";position:absolute;left:5px;top:50%;transform:translateY(-50%);color:var(--green);font-size:10px}
+.toc-title{margin:0 0 var(--s3);color:var(--purple)}
+/* ===== 11. 同期率：阅读进度 ===== */
+.sync{display:none;position:fixed;top:var(--bar-h);left:0;right:0;height:3px;z-index:55;pointer-events:none}
+.sync-bar{width:0;height:100%;background:var(--purple);transition:background-color .3s ease-out}
+.sync.is-done .sync-bar{background:var(--green)}
+.sync-chip{display:none;position:fixed;right:var(--s4);bottom:var(--s4);z-index:55;padding:10px 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+body[data-page="post"] .sync{display:block}
+/* ===== 12. 次回予告 ===== */
+.next-ep{margin-top:var(--s9)}
+.next-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:var(--s5);padding:var(--s5);border-left:4px solid var(--card-red);background:var(--card-bg);color:var(--card-ink);text-decoration:none;transition:background-color .25s var(--ease),color .25s var(--ease)}
+.next-label{padding:6px 12px;background:var(--card-red);color:var(--on-card-red);font-family:var(--font-display);font-weight:900;font-size:18px;line-height:1.3;letter-spacing:.1em;white-space:nowrap}
+.next-body{display:grid;gap:6px;min-width:0}
+.next-kicker{color:var(--card-red)}
+.next-title{font-size:clamp(1.25rem,2.4vw,1.75rem);line-height:1.35}
+.next-desc{color:var(--card-muted);font-size:14px;line-height:1.7}
+.next-arrow{font-size:28px;line-height:1;transition:transform .2s var(--ease)}
+.next-card:hover .next-arrow{transform:translateX(6px)}
+/* ===== 13. 评论挂载位 ===== */
+.comments{margin-top:var(--s8)}
+.comments .sec-label{margin-bottom:var(--s4)}
+.giscus-slot{display:grid;gap:8px;align-content:center;min-height:200px;border:1px dashed var(--muted);color:var(--muted);font-size:14px;text-align:center}
+
+/* ===== 14. 页脚状态栏 ===== */
+.status-bar{padding:var(--s5) 0;border-top:1px solid var(--line);color:var(--muted)}
+.status-inner{display:flex;flex-wrap:wrap;gap:var(--s3) var(--s6)}
+.status-bar .led{margin-right:6px;vertical-align:1px}
+
+/* ===== 15. 目标搜索浮层 ===== */
+.search{width:min(640px,calc(100vw - 32px));margin:12vh auto auto;padding:0;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.search::backdrop{background:rgba(0,0,0,.62)}
+.search-head{display:flex;align-items:center;gap:var(--s3);padding:0 var(--s5);border-bottom:1px solid var(--line);transition:border-color .18s ease-out}
+.search-head:focus-within{border-bottom-color:var(--purple)}
+.search-head .hud{color:var(--red);white-space:nowrap}
+.search-input{flex:1;min-width:0;min-height:60px;border:0;background:transparent;color:var(--ink);font:400 18px var(--font-body);outline:none}
+.search-list{list-style:none;max-height:50vh;padding:8px;overflow:auto}
+.search-list a{display:grid;grid-template-columns:64px minmax(0,1fr);gap:var(--s3);padding:12px;color:var(--ink);text-decoration:none;transition:background-color .15s ease-out}
+.search-list a:hover,.search-list a:focus-visible{background:var(--surface)}
+.search-list .ep-no{color:var(--orange)}
+.hit-tags{display:block;margin-top:2px;color:var(--muted);font:12px var(--font-hud);letter-spacing:.1em}
+.search-empty{padding:var(--s5);color:var(--muted);text-align:center}
+
+/* ===== 16. 元素库 ===== */
+.kit-grid{display:grid;gap:var(--s5);padding-bottom:var(--s9)}
+.spec{display:grid;gap:var(--s4);align-content:start;padding:var(--s5);border:1px solid var(--line)}
+.wide{grid-column:1 / -1}
+.spec-head{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s4);padding-bottom:var(--s3);border-bottom:1px solid var(--line)}
+.spec-name{font:900 17px var(--font-display)}
+.spec-no{color:var(--purple)}
+.spec-use{color:var(--muted);font-size:14px;line-height:1.75}
+.kit-sub{margin-top:8px;color:var(--muted)}
+.kit-note{color:var(--muted);font-size:14px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:var(--s3)}
+.swatch{display:grid;gap:6px}
+.swatch i{display:block;height:64px;border:1px solid var(--line)}
+.swatch span{color:var(--muted);font:12px var(--font-hud);letter-spacing:.04em}
+.font-demo{font-size:15px;line-height:1.6}
+.demo-display{font-size:40px;line-height:1.15}
+.pol-grid{display:grid;gap:var(--s4)}
+.pol{min-height:0;grid-template-rows:auto auto auto;gap:var(--s4);padding:var(--s5)}
+.pol .tc-title{font-size:clamp(1.75rem,3.4vw,2.75rem)}
+.pol-dark{--card-bg:#050507;--card-ink:#F5F4F0;--card-muted:#9C9CA8;--card-red:#FF4D42;--on-card-red:#050507;--card-purple:#B388EB;--card-green:#8BD450}
+.pol-light{--card-bg:#F2F1EC;--card-ink:#0B0B0E;--card-muted:#5B5B66;--card-red:#C81E0C;--on-card-red:#FFFFFF;--card-purple:#711F8C;--card-green:#1F7A33}
+.sync-sample{display:grid;grid-template-columns:48px minmax(0,1fr);align-items:center;gap:var(--s3);margin-top:8px}
+.sync-track{display:block;height:3px;background:var(--line)}
+.sync-track b{display:block;height:100%;background:var(--purple)}
+.sync-sample.is-done .sync-track b{background:var(--green)}
+.lock-box{position:relative;display:grid;place-items:center;height:120px;border:1px dashed var(--line);color:var(--green)}
+.emergency{padding:14px;background:repeating-linear-gradient(-45deg,#C81E0C 0 24px,#0B0B0E 24px 48px)}
+.emergency-inner{display:grid;gap:var(--s3);padding:var(--s6);background:#050507;color:#F5F4F0}
+.emergency-alarm{color:#FF4D42}
+.emergency-title{font-size:clamp(1.75rem,4vw,2.75rem);line-height:1.2}
+.emergency-inner p{max-width:34em;color:#9C9CA8;font-size:14px}
+.emergency-inner a{color:#B388EB;font-weight:600;text-underline-offset:5px}
+.spec .status-bar{padding:var(--s4);border:1px solid var(--line)}
+.spec .next-ep{margin-top:0}
+
+/* ===== 16b. 代码块：行号 / 增删行 / 折叠 / 页签 ===== */
+.term pre code{display:block;min-width:max-content}
+.term pre code:has(.line){display:flex;flex-direction:column}
+.term .line{display:flex}
+.term .ln{flex:none;width:2.4em;margin-right:16px;color:#8A8A99;text-align:right;user-select:none}
+.term .lc{flex:1;padding-right:16px;white-space:pre}
+.term .line.add .lc{background:rgba(139,212,80,.14)}
+.term .line.del .lc{background:rgba(255,77,66,.16)}
+.term .line.hl .lc{background:rgba(179,136,235,.14);box-shadow:inset 3px 0 0 #B388EB}
+.term-fold{padding:4px 0;border-top:1px dashed #3A3A44;border-bottom:1px dashed #3A3A44;color:#8A8A99;font:12px var(--font-hud);letter-spacing:.12em;text-align:center}
+.code-tablist{display:flex;gap:4px}
+.code-tab{min-height:36px;padding:0 12px;border:1px solid var(--line);border-bottom:0;background:transparent;color:var(--muted);font:600 12px var(--font-hud);letter-spacing:.12em;cursor:pointer;transition:color .18s ease-out,background-color .18s ease-out,border-color .18s ease-out}
+.code-tab:hover{color:var(--ink)}
+.code-tab[aria-selected="true"]{border-color:#2A2A34;background:#0A0A12;color:#ECECF1}
+.code-tab[aria-selected="true"]:hover{color:#ECECF1}
+.code-tabs .term{margin:0}
+
+/* ===== 19. Markdown 全元素页 ===== */
+.md-page{padding-bottom:var(--s9)}
+.md-page .sec-head{margin-top:var(--s6)}
+.md-row{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s4);padding:var(--s6) 0;border-top:1px solid var(--line)}
+.md-meta{display:grid;gap:8px;align-content:start}
+.md-no{color:var(--purple)}
+.md-name{font:900 20px/1.3 var(--font-display)}
+.md-how{color:var(--muted);font-size:13px;line-height:1.75}
+.md-how b{color:var(--ink);font-weight:600}
+.md-how code{padding:0 4px;color:var(--ink);font:12px var(--font-hud)}
+.md-demo{min-width:0}
+.md-demo > :first-child{margin-top:0}
+.md-demo > :last-child{margin-bottom:0}
+/* 排版 */
+.post-body h3{margin:2em 0 .7em;font-size:20px;line-height:1.4;font-weight:700}
+.post-body h4{margin:1.6em 0 .6em;font-size:17px;font-weight:700}
+.post-body strong{font-weight:700}
+.post-body del{color:var(--muted)}
+.post-body mark{padding:0 .15em;background:var(--green-fill);color:#0B0B0E}
+.post-body sub,.post-body sup{font-size:.72em;line-height:0}
+.post-body kbd{display:inline-block;min-width:1.9em;margin:0 2px;padding:1px 6px;border:1px solid var(--muted);border-bottom-width:2px;border-radius:3px;color:var(--ink);font:600 12px/1.6 var(--font-hud);text-align:center}
+.post-body abbr[title]{text-decoration:underline dotted;text-decoration-color:var(--muted);text-underline-offset:4px;cursor:help}
+.post-body a.ext::after{content:" ↗";font-size:.85em;text-decoration:none}
+.post-body blockquote{margin:1.5em 0;padding:2px 0 2px 18px;border-left:3px solid var(--purple)}
+.post-body blockquote p{margin:.5em 0}
+.post-body blockquote footer{color:var(--muted);font-size:14px}
+.callout p{margin:0}
+.shot{margin:2em 0}
+/* 任务列表 */
+.post-body .task-list{list-style:none;padding-left:0}
+.post-body .task-list li{position:relative;padding-left:34px}
+.post-body .task-list input{position:absolute;left:0;top:.5em;width:16px;height:16px;margin:0;opacity:0}
+.post-body .task-list li::before{content:"";position:absolute;left:0;top:.55em;width:16px;height:16px;border:1.5px solid var(--muted);background-color:var(--surface);background-position:center;background-repeat:no-repeat;transition:border-color .15s ease-out,background-color .15s ease-out}
+.post-body .task-list li:has(input:checked)::before{border-color:var(--purple);background-color:var(--purple)}
+html[data-theme="day"] .post-body .task-list li:has(input:checked)::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23FFFFFF' stroke-width='2'/%3E%3C/svg%3E")}
+html[data-theme="night"] .post-body .task-list li:has(input:checked)::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%230B0B0E' stroke-width='2'/%3E%3C/svg%3E")}
+.post-body .task-list li:has(input:checked){color:var(--muted)}
+/* 公式 */
+.post-body math{font-size:1.08em}
+.formula{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"tag no" "math math";align-items:center;column-gap:var(--s5);row-gap:var(--s3);margin:2em 0;padding:var(--s4) var(--s5) var(--s5);border:1px solid var(--line);border-left:4px solid var(--purple);background:var(--surface);overflow-x:auto}
+.formula-tag{grid-area:tag;color:var(--purple)}
+.formula-no{grid-area:no;color:var(--muted)}
+.formula math[display="block"]{grid-area:math;margin:0 auto;font-size:1.2em}
+.formula-error{border-left-color:var(--red)}
+.formula-error .formula-tag{color:var(--red)}
+.formula-error code{grid-area:math;margin:0 auto;padding:0;background:none;color:var(--red);font:15px var(--font-hud)}
+/* 图表：MAGI 屏，恒为深色（与代码块同一套底色，不随主题翻面） */
+.dg-scroll{margin:2em 0;border:1px solid #2A2A34;background-color:#0A0A12;background-image:repeating-linear-gradient(0deg,rgba(236,236,241,.06) 0 1px,transparent 1px 28px),repeating-linear-gradient(90deg,rgba(236,236,241,.06) 0 1px,transparent 1px 28px);overflow-x:auto}
+.dg-scroll svg{display:block;width:100%;height:auto;min-width:600px}
+.dg-box{fill:#141418;stroke:#B388EB;stroke-width:1.5}
+.dg-term{fill:#0A0A12;stroke:#8BD450;stroke-width:1.5}
+.dg-decision{fill:#0A0A12;stroke:#FF9830;stroke-width:1.5}
+.dg-actor{fill:#141418;stroke:#B388EB;stroke-width:1.5}
+.dg-group{fill:none;stroke:#9C9CA8;stroke-width:1;stroke-dasharray:4 4}
+.dg-frame{fill:none;stroke:#9C9CA8;stroke-width:1;stroke-dasharray:4 4}
+.dg-frame-tab{fill:#141418;stroke:#9C9CA8;stroke-width:1}
+.dg-edge{fill:none;stroke:#9C9CA8;stroke-width:1.5}
+.dg-edge-dash{stroke-dasharray:6 6}
+.dg-lifeline{fill:none;stroke:#9C9CA8;stroke-width:1;stroke-dasharray:4 6}
+.dg-arrow{fill:#9C9CA8}
+.dg-arrow-line{fill:none;stroke:#9C9CA8;stroke-width:1.5}
+.dg-activation{fill:#221C30;stroke:#B388EB;stroke-width:1.5}
+.dg-text{fill:#ECECF1;font:600 14px var(--font-body);text-anchor:middle;dominant-baseline:central}
+.dg-text-sm{fill:#ECECF1;font:600 13px var(--font-body);text-anchor:middle;dominant-baseline:central}
+.dg-hud{fill:#9C9CA8;font:12px var(--font-hud);letter-spacing:.14em;text-anchor:middle;dominant-baseline:central}
+.dg-hud-start{fill:#9C9CA8;font:12px var(--font-hud);letter-spacing:.14em;text-anchor:start;dominant-baseline:central}
+.dg-source{margin:-6px 0 2em}
+.dg-source summary{min-height:36px}
+.dg-source .term{margin:0 0 var(--s3)}
+/* 表格 */
+.table-wrap{margin:2em 0;overflow-x:auto}
+.table-wrap--wide table{min-width:760px}
+.table-caption{margin-bottom:8px;color:var(--muted)}
+.post-body table{width:100%;border-collapse:collapse;font-size:15px;line-height:1.6}
+.post-body th{padding:10px 12px;border-bottom:2px solid var(--ink);color:var(--muted);font:600 12px var(--font-hud);letter-spacing:.1em;text-align:inherit;white-space:nowrap}
+.post-body td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.post-body tbody tr{transition:background-color .15s ease-out}
+.post-body tbody tr:hover{background:var(--surface)}
+.post-body th.ctr,.post-body td.ctr{text-align:center}
+/* 脚注 / 分割线 / 折叠 */
+.post-body .fn-ref{padding:0 3px;color:var(--purple);font-weight:600;text-decoration:none}
+.post-body .fn-ref:hover{text-decoration:underline}
+.footnotes{margin-top:var(--s8);padding-top:var(--s4);border-top:1px solid var(--line);color:var(--muted);font-size:14px;line-height:1.7}
+.footnotes .sec-label{margin-bottom:var(--s3);color:var(--ink)}
+.footnotes ol{padding-left:1.6em}
+.footnotes li{margin:8px 0}
+.footnotes .fn-back{color:var(--purple);text-decoration:none}
+.post-body hr{height:8px;margin:2.5em 0;border:0;background:repeating-linear-gradient(135deg,var(--stripe) 0 12px,var(--bg) 12px 24px)}
+.post-body details{margin:1.5em 0;border:1px solid var(--line)}
+.post-body summary{display:flex;align-items:center;gap:10px;min-height:44px;padding:12px var(--s4);color:var(--ink);cursor:pointer;list-style:none}
+.post-body summary::-webkit-details-marker{display:none}
+.post-body summary::before{content:"+";color:var(--purple);font-family:var(--font-hud);font-size:16px;line-height:1}
+.post-body details[open] > summary::before{content:"−"}
+.post-body details > :last-child{margin-bottom:var(--s4)}
+.post-body details > p{margin-left:var(--s4);margin-right:var(--s4)}
+/* 多媒体 / 交互组件 */
+.shot-img.is-broken{border:1px dashed var(--red);background:var(--surface);color:var(--red)}
+.media{position:relative;display:grid;place-items:center;aspect-ratio:16 / 9;border:1px dashed var(--muted);background:var(--surface)}
+.media-play{width:0;height:0;border-style:solid;border-width:14px 0 14px 24px;border-color:transparent transparent transparent var(--purple)}
+.media-tag{position:absolute;right:12px;bottom:10px;color:var(--muted)}
+.island{position:relative;margin:2em 0;padding:var(--s5);border:1px dashed var(--purple)}
+.island-tag{display:inline-block;margin-bottom:var(--s4);padding:2px 8px;background:var(--purple);color:var(--on-purple);font:600 12px var(--font-hud);letter-spacing:.12em}
+.island-row{display:flex;align-items:center;gap:var(--s4)}
+.island input[type="range"]{flex:1;min-width:0;accent-color:var(--purple)}
+.island-val{min-width:7.5em;text-align:right;color:var(--purple)}
+.island .sync-track{margin-top:var(--s3)}
+
+/* ===== 17. 响应式 ===== */
+@media (min-width:768px){
+  .ep-row{grid-template-columns:64px 108px minmax(0,1fr) auto;grid-template-areas:"no date title tags";align-items:baseline;gap:var(--s4)}
+  body[data-page="post"] .sync-chip{display:block}
+  .kit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pol-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (min-width:1024px){
+  .post-grid{grid-template-columns:minmax(0,720px) 240px;justify-content:center;gap:var(--s8)}
+  .md-row{grid-template-columns:220px minmax(0,1fr);gap:var(--s8)}
+  .md-meta{position:sticky;top:calc(var(--bar-h) + 24px)}
+  .toc{display:block;position:sticky;top:calc(var(--bar-h) + 24px);align-self:start;max-height:calc(100vh - var(--bar-h) - 48px);overflow:auto}
+  .toc-inline{display:none}
+}
+@media (max-width:719px){
+  .ctl-note{display:none}
+  .site-nav{min-height:72px}
+  .title-card{min-height:min(440px,70vh)}
+}
+@media (max-width:599px){
+  .next-card{grid-template-columns:minmax(0,1fr);justify-items:start}
+}
+/* ===== 18. 动效降级 ===== */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none;animation:none}
+}
+</style>
+</head>
+<body data-page="home">
+
+<!-- 同期率：阅读进度（仅文章页显示） -->
+<div class="sync" id="syncWrap" aria-hidden="true"><div class="sync-bar" id="syncBar"></div></div>
+<div class="sync-chip hud" id="syncChip" aria-hidden="true">SYNC 000%</div>
+
+<!-- 视觉稿控制条 -->
+<header class="ctl">
+  <span class="ctl-tag">视觉稿</span>
+  <span class="ctl-note">站名、文案、日期均为占位示例</span>
+  <div class="tabs" role="tablist" aria-label="视觉稿页面">
+    <button class="tab" id="tab-home" type="button" role="tab" aria-selected="true" aria-controls="page-home">首页</button>
+    <button class="tab" id="tab-post" type="button" role="tab" aria-selected="false" aria-controls="page-post" tabindex="-1">文章页</button>
+    <button class="tab" id="tab-md" type="button" role="tab" aria-selected="false" aria-controls="page-md" tabindex="-1">Markdown</button>
+    <button class="tab" id="tab-kit" type="button" role="tab" aria-selected="false" aria-controls="page-kit" tabindex="-1">元素库</button>
+  </div>
+</header>
+
+<!-- 站点导航 -->
+<nav class="site-nav wrap" aria-label="站点导航">
+  <a class="brand" href="#page-home" data-goto="home">QIYUE<span class="led" aria-hidden="true"></span></a>
+  <ul class="nav-links">
+    <li><a href="#archive" data-goto="home" data-anchor="archive" aria-current="page">文章</a></li>
+    <li><a href="#archive" data-goto="home" data-anchor="archive">标签</a></li>
+    <li><button class="search-btn" type="button">搜索<kbd>⌘K</kbd></button></li>
+    <li><button class="theme-btn" id="themeToggle" type="button" aria-pressed="false" aria-label="切换到夜间模式">夜</button></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- ========== 首页 ========== -->
+<section class="page" id="page-home" role="tabpanel" aria-labelledby="tab-home">
+  <div class="wrap">
+    <section class="title-card" aria-labelledby="home-title">
+      <div class="tc-top hud"><span class="tc-ep">EP.00</span><span>INDEX / 目次</span></div>
+      <h1 class="tc-title display" id="home-title"><span class="squeeze">输入<span class="punct">、</span><br>输出<span class="punct">。</span></span></h1>
+      <div class="tc-foot">
+        <span class="tc-no display">第 00 話</span>
+        <p class="tc-lede">〈占位：一句话介绍你自己，以及这个博客写什么。〉</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="hazard-row wrap"><span class="hazard" aria-hidden="true"></span><span class="hud hazard-label">CAUTION / 立入禁止</span></div>
+
+  <section class="wrap archive" id="archive" aria-labelledby="archive-title">
+    <div class="sec-head">
+      <h2 class="sec-label hud" id="archive-title"><span class="slash">//</span> ARCHIVE<span class="cn">全部话数</span></h2>
+      <div class="chips" role="group" aria-label="按标签筛选">
+        <button class="chip" type="button" data-tag="all" aria-pressed="true">ALL</button>
+        <button class="chip" type="button" data-tag="astro" aria-pressed="false">#ASTRO</button>
+        <button class="chip" type="button" data-tag="vue" aria-pressed="false">#VUE</button>
+        <button class="chip" type="button" data-tag="css" aria-pressed="false">#CSS</button>
+      </div>
+    </div>
+    <ol class="ep-list" id="homeList">
+      <li data-tags="astro">
+        <a class="ep-row lock" href="#page-post" data-goto="post">
+          <span class="ep-no hud">EP.012</span><time class="ep-date hud" datetime="2026-11-20">2026.11.20</time>
+          <span class="ep-title display"><span class="ep-name">用 Content Collections 给 Markdown 加类型</span></span>
+          <span class="ep-tags hud">#ASTRO</span>
+        </a>
+      </li>
+      <li data-tags="astro vue">
+        <a class="ep-row lock" href="#page-post" data-goto="post">
+          <span class="ep-no hud">EP.011</span><time class="ep-date hud" datetime="2026-11-14">2026.11.14</time>
+          <span class="ep-title display"><span class="ep-name">Astro Islands：什么时候该水合</span></span>
+          <span class="ep-tags hud">#ASTRO #VUE</span>
+        </a>
+      </li>
+      <li data-tags="astro css">
+        <a class="ep-row lock" href="#page-post" data-goto="post">
+          <span class="ep-no hud">EP.010</span><time class="ep-date hud" datetime="2026-11-08">2026.11.08</time>
+          <span class="ep-title display"><span class="ep-name">暗色模式不闪烁：一段内联脚本</span></span>
+          <span class="ep-tags hud">#ASTRO #CSS</span>
+        </a>
+      </li>
+      <li data-tags="astro">
+        <a class="ep-row lock" href="#page-post" data-goto="post">
+          <span class="ep-no hud">EP.009</span><time class="ep-date hud" datetime="2026-10-30">2026.10.30</time>
+          <span class="ep-title display"><span class="ep-name">Pagefind 静态搜索接入记</span></span>
+          <span class="ep-tags hud">#ASTRO</span>
+        </a>
+      </li>
+      <li data-tags="vue">
+        <a class="ep-row lock" href="#page-post" data-goto="post">
+          <span class="ep-no hud">EP.008</span><time class="ep-date hud" datetime="2026-10-22">2026.10.22</time>
+          <span class="ep-title display"><span class="ep-name">Giscus 评论区落地</span></span>
+          <span class="ep-tags hud">#VUE</span>
+        </a>
+      </li>
+      <li data-tags="css">
+        <a class="ep-row lock" href="#page-post" data-goto="post">
+          <span class="ep-no hud">EP.007</span><span class="ep-date hud">—</span>
+          <span class="ep-title display"><span class="ep-name">CSS 变量怎么收进 Design Token</span><span class="badge">DRAFT</span></span>
+          <span class="ep-tags hud">#CSS</span>
+        </a>
+      </li>
+    </ol>
+    <p class="ep-empty hud" id="epEmpty" role="status" hidden>没有命中目标。换个标签试试。</p>
+  </section>
+</section>
+
+<!-- ========== 文章页 ========== -->
+<section class="page" id="page-post" role="tabpanel" aria-labelledby="tab-post" hidden>
+  <div class="wrap">
+    <header class="title-card post-head">
+      <div class="tc-top hud"><span class="tc-ep">EP.010 · 第 10 話</span><span>STATUS: PUBLIC</span></div>
+      <h1 class="tc-title post-title display"><span class="squeeze">暗色模式不闪烁：<br>一段内联脚本</span></h1>
+      <div class="tc-meta hud"><time datetime="2026-11-08">2026.11.08</time><span>EST. 5 MIN</span><span class="tc-tags">#ASTRO #CSS</span></div>
+    </header>
+
+    <details class="toc-inline">
+      <summary class="hud">TARGET INDEX / 目录</summary>
+      <ol class="toc-list hud">
+        <li><a href="#s1">闪烁从哪来</a></li>
+        <li><a href="#s2">内联脚本</a></li>
+        <li><a href="#s3">怎么验证</a></li>
+        <li><a href="#s4">小结</a></li>
+      </ol>
+    </details>
+
+    <div class="post-grid">
+      <article class="post" id="article">
+        <div class="post-body">
+          <p>深色模式最常见的毛病是刷新时「白一下」：页面已经按浅色画出来了，主题脚本才姗姗来迟。问题不在浏览器，而在执行顺序。</p>
+
+          <h2 id="s1">闪烁从哪来</h2>
+          <p>主题脚本通常放在 <code>body</code> 末尾，或者打成独立文件。浏览器执行到它之前，并不知道该用哪套颜色，于是先用默认的浅色画一帧，脚本跑完再换成深色。这一帧就是闪烁。</p>
+          <figure class="monologue">
+            <figcaption class="hud">MONOLOGUE / 独白</figcaption>
+            <p>闪烁不是性能问题，是「先渲染、后读偏好」这个顺序的问题。</p>
+          </figure>
+
+          <h2 id="s2">内联脚本</h2>
+          <p>把读取偏好的逻辑直接写进 <code>head</code>，在首次绘制之前给根元素打上标记：</p>
+          <figure class="term lock is-locked">
+            <figcaption class="term-bar hud"><span class="term-path">MAGI://src/layouts/BaseLayout.astro</span><span class="term-lang">ASTRO</span><button class="term-copy" type="button" data-copy aria-label="复制代码">COPY</button></figcaption>
+            <pre><code><span class="f">&lt;html</span> lang=<span class="s">"zh-CN"</span><span class="f">&gt;</span>
+  <span class="f">&lt;head&gt;</span>
+    <span class="c">&lt;!-- 首次绘制前落下主题标记，避免闪白 --&gt;</span>
+    <span class="f">&lt;script</span> is:inline<span class="f">&gt;</span>
+      <span class="k">const</span> dark = matchMedia(<span class="s">'(prefers-color-scheme: dark)'</span>).matches;
+      document.documentElement.dataset.theme = dark ? <span class="s">'night'</span> : <span class="s">'day'</span>;
+    <span class="f">&lt;/script&gt;</span>
+    <span class="f">&lt;title&gt;</span>{title}<span class="f">&lt;/title&gt;</span>
+  <span class="f">&lt;/head&gt;</span></code></pre>
+          </figure>
+          <p><code>is:inline</code> 是关键：它让 Astro 原样输出这段脚本，而不是打包成外部文件。</p>
+          <aside class="callout callout-warning" role="note">
+            <span class="callout-bar" aria-hidden="true"></span>
+            <p><strong class="hud callout-label">WARNING</strong>内联脚本里不要引用外部文件，也不要等 <code>DOMContentLoaded</code>，否则又会多出一次等待。</p>
+          </aside>
+
+          <h2 id="s3">怎么验证</h2>
+          <ul>
+            <li>打开开发者工具的 Rendering 面板，把 <code>prefers-color-scheme</code> 设为 dark 后强制刷新。</li>
+            <li>在 Network 面板勾选 Disable cache，观察首帧是否已经是深色。</li>
+            <li>切到慢速网络再试一次：内联脚本不依赖网络，结果应当不变。</li>
+          </ul>
+          <figure class="shot lock is-locked">
+            <div class="shot-img" role="img" aria-label="配图占位：首帧渲染对比">IMG_01</div>
+            <figcaption class="hud">FIG.01 — 〈占位：配图说明〉</figcaption>
+          </figure>
+
+          <h2 id="s4">小结</h2>
+          <p>一共三行：读偏好、写标记、放进 <code>head</code>。颜色本身交给 CSS 变量接管，下一话讲怎么把它们收进 <a href="#page-kit" data-goto="kit">Design Token</a>。</p>
+        </div>
+
+        <nav class="next-ep" aria-label="下一篇">
+          <a class="next-card" href="#page-post" data-goto="post">
+            <span class="next-label">次回予告</span>
+            <span class="next-body">
+              <span class="hud next-kicker">NEXT EPISODE · EP.011</span>
+              <span class="next-title display">Astro Islands：什么时候该水合</span>
+              <span class="next-desc">〈占位：下一篇的摘要。〉</span>
+            </span>
+            <span class="next-arrow" aria-hidden="true">→</span>
+          </a>
+        </nav>
+
+        <section class="comments" aria-labelledby="comments-title">
+          <h2 class="sec-label hud" id="comments-title"><span class="slash">//</span> FEEDBACK<span class="cn">评论</span></h2>
+          <div class="giscus-slot" role="img" aria-label="Giscus 评论区挂载位置">
+            <span class="hud">GISCUS / GITHUB DISCUSSIONS</span>
+            <span>〈占位：评论区挂载位置，评论者需登录 GitHub〉</span>
+          </div>
+        </section>
+      </article>
+
+      <aside class="toc">
+        <nav aria-label="目录">
+          <h2 class="toc-title hud">TARGET INDEX / 目录</h2>
+          <ol class="toc-list hud">
+            <li><a href="#s1">闪烁从哪来</a></li>
+            <li><a href="#s2">内联脚本</a></li>
+            <li><a href="#s3">怎么验证</a></li>
+            <li><a href="#s4">小结</a></li>
+          </ol>
+        </nav>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Markdown 全元素 ========== -->
+<section class="page md-page" id="page-md" role="tabpanel" aria-labelledby="tab-md" hidden>
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="sec-label hud"><span class="slash">//</span> MARKDOWN<span class="cn">全元素样式</span></h2>
+      <p class="kit-note">左列是元素名和实现方式，右列是它在文章里的真实样式，样式与文章页共用同一套代码。</p>
+    </div>
+
+    <div class="md-row">
+      <div class="md-meta">
+        <span class="hud md-no">01</span>
+        <h3 class="md-name">排版</h3>
+        <p class="md-how"><b>实现：</b>标题、粗体、斜体、删除线、自动链接由 GFM 内置；上下标用 remark-sub-super；高亮直接写 <code>&lt;mark&gt;</code>；表情与缩写是可选扩展。</p>
+      </div>
+      <div class="md-demo post-body">
+        <h3>三级标题</h3>
+        <h4>四级标题</h4>
+        <p>一段正文里可以混排 <strong>粗体</strong>、<em>斜体</em>、<del>删除线</del>、<mark>高亮</mark>、<code>行内代码</code>、H<sub>2</sub>O 与 X<sup>2</sup>，快捷键 <kbd>⌘</kbd> <kbd>K</kbd>，缩写 <abbr title="HyperText Markup Language">HTML</abbr>，以及表情 🚀。</p>
+        <p>链接有三种：<a href="#page-md">普通链接</a>、自动链接 <a href="https://astro.build">https://astro.build</a>、带箭头的<a class="ext" href="https://docs.astro.build" target="_blank" rel="noopener noreferrer">外链</a>。</p>
+      </div>
+    </div>
+
+    <div class="md-row">
+      <div class="md-meta">
+        <span class="hud md-no">02</span>
+        <h3 class="md-name">列表</h3>
+        <p class="md-how"><b>实现：</b>无序、有序、嵌套和任务列表都由 GFM 内置，只需要写样式。任务列表的勾选框用 CSS 重绘，颜色跟随主题。</p>
+      </div>
+      <div class="md-demo post-body">
+        <ul>
+          <li>写作
+            <ul>
+              <li>Markdown 正文</li>
+              <li>Frontmatter 元信息</li>
+            </ul>
+          </li>
+          <li>构建
+            <ul>
+              <li>remark 解析，rehype 输出</li>
+            </ul>
+          </li>
+        </ul>
+        <ol start="3">
+          <li>有序列表可以从任意数字开始</li>
+          <li>第二项</li>
+        </ol>
+        <ul class="task-list">
+          <li><input type="checkbox" checked disabled aria-label="已完成：标题卡">已完成：标题卡</li>
+          <li><input type="checkbox" checked disabled aria-label="已完成：代码块">已完成：代码块</li>
+          <li><input type="checkbox" disabled aria-label="未完成：公式编号">未完成：公式编号</li>
+        </ul>
+        <ul>
+          <li>列表项里还可以嵌引用：
+            <blockquote><p>缩进四格，引用就属于这个列表项。</p></blockquote>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="md-row">
+      <div class="md-meta">
+        <span class="hud md-no">03</span>
+        <h3 class="md-name">引用与提示框</h3>
+        <p class="md-how"><b>实现：</b>GitHub 风格的五种提示框用 rehype-github-alerts，在引用块首行写 <code>&gt; [!NOTE]</code> 即可。「独白」是本站特有的引用样式，通过 MDX 组件调用。</p>
+      </div>
+      <div class="md-demo post-body">
+        <blockquote>
+          <p>普通的引用块：一根紫色竖线，安静地退在正文后面。</p>
+          <footer>—— 某篇文章</footer>
+        </blockquote>
+        <figure class="monologue">
+          <figcaption class="hud">MONOLOGUE / 独白</figcaption>
+          <p>独白是特殊的引用：整块翻面，像黑屏上的独白字幕。</p>
+        </figure>
+        <aside class="callout callout-note" role="note"><span class="callout-bar" aria-hidden="true"></span><p><strong class="hud callout-label">NOTE</strong>补充说明，不打断阅读。</p></aside>
+        <aside class="callout callout-tip" role="note"><span class="callout-bar" aria-hidden="true"></span><p><strong class="hud callout-label">TIP</strong>有用的小技巧。</p></aside>
+        <aside class="callout callout-important" role="note"><span class="callout-bar" aria-hidden="true"></span><p><strong class="hud callout-label">IMPORTANT</strong>读之前最好先知道的事。</p></aside>
+        <aside class="callout callout-warning" role="note"><span class="callout-bar" aria-hidden="true"></span><p><strong class="hud callout-label">WARNING</strong>可能出错的地方。</p></aside>
+        <aside class="callout callout-caution" role="note"><span class="callout-bar" aria-hidden="true"></span><p><strong class="hud callout-label">CAUTION</strong>会造成数据丢失或构建失败。</p></aside>
+      </div>
+    </div>
+
+    <div class="md-row">
+      <div class="md-meta">
+        <span class="hud md-no">04</span>
+        <h3 class="md-name">代码块</h3>
+        <p class="md-how"><b>实现：</b>astro-expressive-code 一个插件提供文件名栏、行号、复制按钮、增删标记、折叠段和代码页签。外框用它的 styleOverrides 改成 MAGI 终端，两种主题下恒为深色。</p>
+      </div>
+      <div class="md-demo post-body">
+        <p>带文件名、行号和复制按钮的代码块：</p>
+        <figure class="term lock is-locked">
+          <figcaption class="term-bar hud"><span class="term-path">MAGI://src/content.config.ts</span><span class="term-lang">TS</span><button class="term-copy" type="button" data-copy aria-label="复制代码">COPY</button></figcaption>
+          <pre><code><span class="line"><span class="ln" aria-hidden="true">1</span><span class="lc"><span class="k">import</span> { defineCollection } <span class="k">from</span> <span class="s">'astro:content'</span>;</span></span>
+<span class="line"><span class="ln" aria-hidden="true">2</span><span class="lc"><span class="k">import</span> { glob } <span class="k">from</span> <span class="s">'astro/loaders'</span>;</span></span>
+<span class="line"><span class="ln" aria-hidden="true">3</span><span class="lc"></span></span>
+<span class="line"><span class="ln" aria-hidden="true">4</span><span class="lc"><span class="k">const</span> blog = <span class="f">defineCollection</span>({</span></span>
+<span class="line"><span class="ln" aria-hidden="true">5</span><span class="lc">  loader: <span class="f">glob</span>({ base: <span class="s">'./src/content/blog'</span> }),</span></span>
+<span class="line"><span class="ln" aria-hidden="true">6</span><span class="lc">});</span></span></code></pre>
+        </figure>
+
+        <p>增删标记与重点行：</p>
+        <figure class="term lock is-locked">
+          <figcaption class="term-bar hud"><span class="term-path">MAGI://astro.config.mjs</span><span class="term-lang">DIFF</span><button class="term-copy" type="button" data-copy aria-label="复制代码">COPY</button></figcaption>
+          <pre><code><span class="line del"><span class="ln" aria-hidden="true">3</span><span class="lc">- <span class="c">// 由 Astro 默认开启 GFM</span></span></span>
+<span class="line add"><span class="ln" aria-hidden="true">3</span><span class="lc">+ <span class="c">// 显式声明，语义更清楚</span></span></span>
+<span class="line"><span class="ln" aria-hidden="true">4</span><span class="lc">  <span class="k">const</span> processor = <span class="f">unified</span>({</span></span>
+<span class="line hl"><span class="ln" aria-hidden="true">5</span><span class="lc">    remarkPlugins: [remarkMath],</span></span>
+<span class="line"><span class="ln" aria-hidden="true">6</span><span class="lc">  });</span></span></code></pre>
+        </figure>
+
+        <p>同一段命令的多个版本，用代码页签收在一起：</p>
+        <div class="code-tabs" data-codegroup>
+          <div class="code-tablist" role="tablist" aria-label="包管理器">
+            <button class="code-tab" id="ct-pnpm" type="button" role="tab" aria-selected="true" aria-controls="cp-pnpm">PNPM</button>
+            <button class="code-tab" id="ct-npm" type="button" role="tab" aria-selected="false" aria-controls="cp-npm" tabindex="-1">NPM</button>
+            <button class="code-tab" id="ct-yarn" type="button" role="tab" aria-selected="false" aria-controls="cp-yarn" tabindex="-1">YARN</button>
+          </div>
+          <figure class="term" id="cp-pnpm" role="tabpanel" aria-labelledby="ct-pnpm"><pre><code>pnpm add remark-math rehype-katex</code></pre></figure>
+          <figure class="term" id="cp-npm" role="tabpanel" aria-labelledby="ct-npm" hidden><pre><code>npm install remark-math rehype-katex</code></pre></figure>
+          <figure class="term" id="cp-yarn" role="tabpanel" aria-labelledby="ct-yarn" hidden><pre><code>yarn add remark-math rehype-katex</code></pre></figure>
+        </div>
+
+        <p>过长的代码块可以折叠中段：</p>
+        <figure class="term lock is-locked">
+          <figcaption class="term-bar hud"><span class="term-path">MAGI://src/long-file.ts</span><span class="term-lang">TS</span><button class="term-copy" type="button" data-copy aria-label="复制代码">COPY</button></figcaption>
+          <pre><code><span class="line"><span class="ln" aria-hidden="true">1</span><span class="lc"><span class="k">export</span> <span class="k">const</span> site = <span class="s">'qiyue.blog'</span>;</span></span></code></pre>
+          <div class="term-fold">··· 已折叠 12 行 ···</div>
+          <pre><code><span class="line"><span class="ln" aria-hidden="true">14</span><span class="lc"><span class="k">export</span> <span class="k">default</span> config;</span></span></code></pre>
+        </figure>
+      </div>
+    </div>
+
+    <div class="md-row">
+      <div class="md-meta">
+        <span class="hud md-no">05</span>
+        <h3 class="md-name">公式</h3>
+        <p class="md-how"><b>实现：</b>remark-math 解析，rehype-katex 在构建期渲染成 HTML，页面不加载公式脚本。编号面板是包在外面的 figure。视觉稿用浏览器原生 MathML 离线示意，真实字形以 KaTeX 为准。</p>
+      </div>
+      <div class="md-demo post-body">
+        <p>行内公式嵌在句子里，例如质能方程 <math><mi>E</mi><mo>=</mo><mi>m</mi><msup><mi>c</mi><mn>2</mn></msup></math>，字号跟随正文。</p>
+        <figure class="formula">
+          <figcaption class="hud formula-tag">EQ.01 · 高斯积分</figcaption>
+          <math display="block">
+            <msubsup><mo>∫</mo><mrow><mo>−</mo><mi>∞</mi></mrow><mrow><mo>+</mo><mi>∞</mi></mrow></msubsup>
+            <msup><mi>e</mi><mrow><mo>−</mo><msup><mi>x</mi><mn>2</mn></msup></mrow></msup>
+            <mspace width="0.167em"></mspace>
+            <mi>d</mi><mi>x</mi>
+            <mo>=</mo>
+            <msqrt><mi>π</mi></msqrt>
+          </math>
+          <span class="hud formula-no" aria-hidden="true">(1)</span>
+        </figure>
+        <figure class="formula">
+          <figcaption class="hud formula-tag">EQ.02 · 级数</figcaption>
+          <math display="block">
+            <munderover><mo>∑</mo><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><mi>∞</mi></munderover>
+            <mfrac><mn>1</mn><msup><mi>n</mi><mn>2</mn></msup></mfrac>
+            <mo>=</mo>
+            <mfrac><msup><mi>π</mi><mn>2</mn></msup><mn>6</mn></mfrac>
+          </math>
+          <span class="hud formula-no" aria-hidden="true">(2)</span>
+        </figure>
+        <figure class="formula">
+          <figcaption class="hud formula-tag">EQ.03 · 矩阵</figcaption>
+          <math display="block">
+            <mrow><mo>[</mo><mtable rowspacing="0.4em" columnspacing="1em"><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>]</mo></mrow>
+            <mo>×</mo>
+            <mrow><mo>[</mo><mtable rowspacing="0.4em" columnspacing="1em"><mtr><mtd><mi>x</mi></mtd></mtr><mtr><mtd><mi>y</mi></mtd></mtr></mtable><mo>]</mo></mrow>
+            <mo>=</mo>
+            <mrow><mo>[</mo><mtable rowspacing="0.4em" columnspacing="1em"><mtr><mtd><mrow><mi>a</mi><mi>x</mi><mo>+</mo><mi>b</mi><mi>y</mi></mrow></mtd></mtr><mtr><mtd><mrow><mi>c</mi><mi>x</mi><mo>+</mo><mi>d</mi><mi>y</mi></mrow></mtd></mtr></mtable><mo>]</mo></mrow>
+          </math>
+          <span class="hud formula-no" aria-hidden="true">(3)</span>
+        </figure>
+        <p>写错的公式不会被吞掉：KaTeX 会把源码原样输出，这里给它配上红色标签。</p>
+        <figure class="formula formula-error">
+          <figcaption class="hud formula-tag">EQ.ERR · PARSE ERROR</figcaption>
+          <code>\frac{1}{</code>
+          <span class="hud formula-no" aria-hidden="true">(—)</span>
+        </figure>
+      </div>
+    </div>
+
+    <div class="md-row">
+      <div class="md-meta">
+        <span class="hud md-no">06</span>
+        <h3 class="md-name">图表</h3>
+        <p class="md-how"><b>实现：</b>代码块语言写成 mermaid，astro-mermaid 在浏览器里按需渲染。它的 autoTheme 只能在 Mermaid 内置的两套主题间切换，用不了自定义配色，所以关掉它，用 <code>theme: base</code> 配一套 MAGI 屏配色。下面两张是按同一套变量手绘的示意图。</p>
+      </div>
+      <div class="md-demo post-body">
+        <p>图表面板和代码块一样恒为深色，像一块 MAGI 屏嵌在文章里。矩形走紫色，判断走橙色，起止走绿色。</p>
+        <div class="dg-scroll">
+          <svg viewBox="0 0 760 310" role="img" aria-label="流程图：从开始写作到发布，根据是否包含公式或图表走不同分支">
+            <defs>
+              <marker id="dg-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path class="dg-arrow" d="M0 0L10 5L0 10z"></path>
+              </marker>
+            </defs>
+            <rect class="dg-group" x="536" y="8" width="208" height="196"></rect>
+            <text class="dg-hud-start" x="548" y="18">RENDER</text>
+            <rect class="dg-term" x="20" y="28" width="120" height="40" rx="20"></rect>
+            <text class="dg-text" x="80" y="48">开始写作</text>
+            <rect class="dg-box" x="180" y="28" width="140" height="40"></rect>
+            <text class="dg-text" x="250" y="48">撰写 Markdown</text>
+            <polygon class="dg-decision" points="400,8 470,48 400,88 330,48"></polygon>
+            <text class="dg-text-sm" x="400" y="48">有公式或图表?</text>
+            <rect class="dg-box" x="560" y="28" width="160" height="40"></rect>
+            <text class="dg-text" x="640" y="48">remark 插件解析</text>
+            <rect class="dg-box" x="560" y="150" width="160" height="40"></rect>
+            <text class="dg-text" x="640" y="170">KaTeX / Mermaid</text>
+            <rect class="dg-box" x="300" y="150" width="160" height="40"></rect>
+            <text class="dg-text" x="380" y="170">构建为静态 HTML</text>
+            <rect class="dg-term" x="330" y="252" width="100" height="40" rx="20"></rect>
+            <text class="dg-text" x="380" y="272">发布</text>
+            <path class="dg-edge" marker-end="url(#dg-head)" d="M140 48H180"></path>
+            <path class="dg-edge" marker-end="url(#dg-head)" d="M320 48H330"></path>
+            <path class="dg-edge" marker-end="url(#dg-head)" d="M470 48H560"></path>
+            <text class="dg-hud" x="515" y="34">是</text>
+            <path class="dg-edge" marker-end="url(#dg-head)" d="M400 88V150"></path>
+            <text class="dg-hud-start" x="410" y="112">否</text>
+            <path class="dg-edge" marker-end="url(#dg-head)" d="M640 68V150"></path>
+            <path class="dg-edge" marker-end="url(#dg-head)" d="M560 170H460"></path>
+            <path class="dg-edge" marker-end="url(#dg-head)" d="M380 190V252"></path>
+          </svg>
+        </div>
+        <details class="dg-source">
+          <summary class="hud">MERMAID 源码</summary>
+          <figure class="term lock is-locked">
+            <figcaption class="term-bar hud"><span class="term-path">flowchart.md</span><span class="term-lang">MERMAID</span><button class="term-copy" type="button" data-copy aria-label="复制代码">COPY</button></figcaption>
+            <pre><code>flowchart TD
+    A([开始写作]) --&gt; B[撰写 Markdown]
+    B --&gt; C{有公式或图表?}
+    C -- 是 --&gt; D[remark 插件解析]
+    D --&gt; E[KaTeX / Mermaid]
+    C -- 否 --&gt; F[构建为静态 HTML]
+    E --&gt; F
+    F --&gt; G([发布])</code></pre>
+          </figure>
+        </details>
+
+        <p>时序图：参与者框走紫色，激活条用紫色浅底，循环框用虚线。</p>
+        <div class="dg-scroll">
+          <svg viewBox="0 0 720 330" role="img" aria-label="时序图：页面加载后发现图表节点，按需加载 Mermaid 引擎并替换为 SVG">
+            <defs>
+              <marker id="dg-head-open" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+                <path class="dg-arrow-line" d="M1 1L11 6L1 11"></path>
+              </marker>
+            </defs>
+            <path class="dg-lifeline" d="M130 56V312"></path>
+            <path class="dg-lifeline" d="M370 56V312"></path>
+            <path class="dg-lifeline" d="M630 56V312"></path>
+            <rect class="dg-frame" x="330" y="128" width="340" height="108"></rect>
+            <rect class="dg-frame-tab" x="330" y="128" width="112" height="22"></rect>
+            <text class="dg-hud-start" x="338" y="139">opt 存在图表</text>
+            <rect class="dg-activation" x="364" y="96" width="12" height="176"></rect>
+            <rect class="dg-activation" x="624" y="172" width="12" height="56"></rect>
+            <path class="dg-edge" marker-end="url(#dg-head-open)" d="M130 96H364"></path>
+            <text class="dg-text-sm" x="247" y="84">发现图表节点</text>
+            <path class="dg-edge" marker-end="url(#dg-head-open)" d="M376 172H624"></path>
+            <text class="dg-text-sm" x="500" y="160">按需加载</text>
+            <path class="dg-edge dg-edge-dash" marker-end="url(#dg-head-open)" d="M624 216H376"></path>
+            <text class="dg-text-sm" x="500" y="204">输出 SVG</text>
+            <path class="dg-edge dg-edge-dash" marker-end="url(#dg-head-open)" d="M364 256H130"></path>
+            <text class="dg-text-sm" x="247" y="244">替换为 SVG</text>
+            <rect class="dg-actor" x="60" y="16" width="140" height="40"></rect>
+            <text class="dg-text" x="130" y="36">浏览器</text>
+            <rect class="dg-actor" x="300" y="16" width="140" height="40"></rect>
+            <text class="dg-text" x="370" y="36">astro-mermaid</text>
+            <rect class="dg-actor" x="560" y="16" width="140" height="40"></rect>
+            <text class="dg-text" x="630" y="36">Mermaid 引擎</text>
+          </svg>
+        </div>
+        <details class="dg-source">
+          <summary class="hud">MERMAID 源码</summary>
+          <figure class="term lock is-locked">
+            <figcaption class="term-bar hud"><span class="term-path">sequence.md</span><span class="term-lang">MERMAID</span><button class="term-copy" type="button" data-copy aria-label="复制代码">COPY</button></figcaption>
+            <pre><code>sequenceDiagram
+    participant B as 浏览器
+    participant S as astro-mermaid
+    participant M as Mermaid 引擎
+    B-&gt;&gt;S: 发现图表节点
+    opt 存在图表
+        S-&gt;&gt;M: 按需加载
+        M--&gt;&gt;S: 输出 SVG
+    end
+    S--&gt;&gt;B: 替换为 SVG</code></pre>
+          </figure>
+        </details>
+
+        <div class="table-wrap">
+          <p class="hud table-caption">MERMAID 主题变量 → MAGI 屏配色</p>
+          <table>
+            <thead><tr><th>Mermaid 变量</th><th>值</th><th>管什么</th></tr></thead>
+            <tbody>
+              <tr><td><code>primaryColor</code></td><td>#141418</td><td>节点填充</td></tr>
+              <tr><td><code>primaryBorderColor</code></td><td>#B388EB</td><td>节点边线</td></tr>
+              <tr><td><code>primaryTextColor</code></td><td>#ECECF1</td><td>节点文字</td></tr>
+              <tr><td><code>lineColor</code></td><td>#9C9CA8</td><td>连线与箭头</td></tr>
+              <tr><td><code>actorBkg</code></td><td>#141418</td><td>时序图参与者填充</td></tr>
+              <tr><td><code>activationBkgColor</code></td><td>#221C30</td><td>时序图激活条</td></tr>
+              <tr><td><code>fontFamily</code></td><td>系统无衬线栈</td><td>图内文字</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="md-how">判断节点的橙色、起止节点的绿色，在图表源码里用 Mermaid 的 classDef 单独指定。变量名以 Mermaid 官方文档为准，接入时需实跑核对。</p>
+      </div>
+    </div>
+
+    <div class="md-row">
+      <div class="md-meta">
+        <span class="hud md-no">07</span>
+        <h3 class="md-name">表格</h3>
+        <p class="md-how"><b>实现：</b>GFM 内置。表头用等宽小字，数字列右对齐。列数多的表格，外面包一层横向滚动容器，窄屏不会撑破版心。</p>
+      </div>
+      <div class="md-demo post-body">
+        <div class="table-wrap">
+          <p class="hud table-caption">TABLE.01 · 处理器对照</p>
+          <table>
+            <thead><tr><th>处理器</th><th>插件写法</th><th>直接用 remark 插件</th><th class="ctr">v7 默认</th></tr></thead>
+            <tbody>
+              <tr><td><code>unified()</code></td><td>remarkPlugins / rehypePlugins</td><td>能</td><td class="ctr">否</td></tr>
+              <tr><td><code>satteri()</code></td><td>mdastPlugins / hastPlugins</td><td>不能</td><td class="ctr">是</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap table-wrap--wide">
+          <p class="hud table-caption">TABLE.02 · 依赖清单（版本号为 2026.11.25 查询结果，横向滚动示例）</p>
+          <table>
+            <thead><tr><th>包</th><th>版本</th><th>作用</th></tr></thead>
+            <tbody>
+              <tr><td><code>remark-math</code></td><td>6.0.0</td><td>识别 <code>$</code> 与 <code>$$</code> 公式语法</td></tr>
+              <tr><td><code>rehype-katex</code></td><td>7.0.1</td><td>构建期把公式渲染成 HTML</td></tr>
+              <tr><td><code>astro-expressive-code</code></td><td>0.44.4</td><td>代码块的行号、文件名栏、复制按钮与标记</td></tr>
+              <tr><td><code>astro-mermaid</code></td><td>2.2.0</td><td>流程图等图表，浏览器端按需渲染</td></tr>
+              <tr><td><code>rehype-github-alerts</code></td><td>4.2.0</td><td>GitHub 风格的五种提示框</td></tr>
+              <tr><td><code>remark-sub-super</code></td><td>1.0.21</td><td>上标与下标</td></tr>
+              <tr><td><code>@astrojs/markdown-remark</code></td><td>7.3.10</td><td>Unified 处理器本体</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="md-row">
+      <div class="md-meta">
+        <span class="hud md-no">08</span>
+        <h3 class="md-name">脚注、分割线与折叠</h3>
+        <p class="md-how"><b>实现：</b>脚注由 GFM 内置，写 <code>[^1]</code> 即可。分割线渲染成黄黑警示条。折叠块用原生 details 元素，不需要脚本。</p>
+      </div>
+      <div class="md-demo post-body">
+        <p>Astro 7 的默认处理器是 Sätteri<a class="fn-ref" href="#fn-1" id="fnref-1" aria-label="脚注 1"><sup>1</sup></a>，本站为了公式和流程图切回了 Unified<a class="fn-ref" href="#fn-2" id="fnref-2" aria-label="脚注 2"><sup>2</sup></a>。</p>
+        <hr>
+        <details>
+          <summary>展开：为什么不用默认处理器</summary>
+          <p>因为 Sätteri 不能直接使用 remark / rehype 插件，而公式、提示框、上下标这些能力都来自那个生态。</p>
+        </details>
+        <section class="footnotes" aria-label="脚注">
+          <p class="sec-label hud">NOTES<span class="cn">注释</span></p>
+          <ol>
+            <li id="fn-1">自 Astro 7 起，Sätteri 是默认的 Markdown 处理器。<a class="fn-back" href="#fnref-1" aria-label="返回脚注 1">↩</a></li>
+            <li id="fn-2">通过 <code>markdown.processor = unified()</code> 切换。<a class="fn-back" href="#fnref-2" aria-label="返回脚注 2">↩</a></li>
+          </ol>
+        </section>
+      </div>
+    </div>
+
+    <div class="md-row">
+      <div class="md-meta">
+        <span class="hud md-no">09</span>
+        <h3 class="md-name">图片与多媒体</h3>
+        <p class="md-how"><b>实现：</b>图片放在 src/assets 用相对路径引用，交给 Astro 的资源管线。视频在 MDX 里嵌入第三方组件。每张图都要有说明文字和替代文本。</p>
+      </div>
+      <div class="md-demo post-body">
+        <figure class="shot lock is-locked">
+          <div class="shot-img" role="img" aria-label="配图占位：某张截图">IMG_01</div>
+          <figcaption class="hud">FIG.01 — 〈占位：配图说明〉</figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="shot-img is-broken" role="img" aria-label="图片加载失败时的占位">IMG NOT FOUND</div>
+          <figcaption class="hud">FIG.02 — 加载失败态</figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="media"><span class="media-play" aria-hidden="true"></span><span class="hud media-tag">VIDEO / 16:9</span></div>
+          <figcaption class="hud">FIG.03 — 视频嵌入占位</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="md-row">
+      <div class="md-meta">
+        <span class="hud md-no">10</span>
+        <h3 class="md-name">内嵌交互组件</h3>
+        <p class="md-how"><b>实现：</b>文章改用 .mdx，直接写 Vue 组件，用 client 指令控制何时水合。虚线框标出的是岛屿边界，只有框内需要浏览器执行脚本。</p>
+      </div>
+      <div class="md-demo post-body">
+        <div class="island">
+          <span class="island-tag">VUE ISLAND · client:visible</span>
+          <div class="island-row">
+            <label class="hud" for="islandRange">同期率</label>
+            <input id="islandRange" type="range" min="0" max="100" value="41" aria-valuetext="同期率 41%">
+            <span class="hud island-val" id="islandVal" aria-hidden="true">SYNC 041%</span>
+          </div>
+          <i class="sync-track" aria-hidden="true"><b id="islandBar" style="width:41%"></b></i>
+        </div>
+        <p>拖动滑块可以试试。组件在滚进视口时才加载脚本，其余时间页面是纯静态的。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 元素库 ========== -->
+<section class="page" id="page-kit" role="tabpanel" aria-labelledby="tab-kit" hidden>
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="sec-label hud"><span class="slash">//</span> ELEMENT KIT<span class="cn">元素库</span></h2>
+      <p class="kit-note">切到文章页，可以看这些元素在真实排版里的样子。</p>
+    </div>
+    <div class="kit-grid">
+
+      <section class="spec wide" aria-labelledby="k1">
+        <div class="spec-head"><h3 class="spec-name" id="k1">色板</h3><span class="spec-no hud">01</span></div>
+        <p class="spec-use">四色各有唯一职责：紫 = 链接与焦点，绿 = 强调与状态，橙 = 话数与标签，红只用于警示与话数编号。</p>
+        <h4 class="hud kit-sub">昼 DAY</h4>
+        <div class="swatches">
+          <div class="swatch"><i style="background:#F5F4F0"></i><span>#F5F4F0 纸</span></div>
+          <div class="swatch"><i style="background:#111114"></i><span>#111114 墨</span></div>
+          <div class="swatch"><i style="background:#711F8C"></i><span>#711F8C 紫</span></div>
+          <div class="swatch"><i style="background:#1F7A33"></i><span>#1F7A33 绿 · 文字</span></div>
+          <div class="swatch"><i style="background:#52D053"></i><span>#52D053 绿 · 填充</span></div>
+          <div class="swatch"><i style="background:#C81E0C"></i><span>#C81E0C 红</span></div>
+        </div>
+        <h4 class="hud kit-sub">夜 NIGHT</h4>
+        <div class="swatches">
+          <div class="swatch"><i style="background:#0B0B0E"></i><span>#0B0B0E 底</span></div>
+          <div class="swatch"><i style="background:#ECECF1"></i><span>#ECECF1 字</span></div>
+          <div class="swatch"><i style="background:#B388EB"></i><span>#B388EB 紫</span></div>
+          <div class="swatch"><i style="background:#8BD450"></i><span>#8BD450 绿</span></div>
+          <div class="swatch"><i style="background:#FF9830"></i><span>#FF9830 橙</span></div>
+          <div class="swatch"><i style="background:#FF4D42"></i><span>#FF4D42 红</span></div>
+        </div>
+      </section>
+
+      <section class="spec" aria-labelledby="k2">
+        <div class="spec-head"><h3 class="spec-name" id="k2">字体</h3><span class="spec-no hud">02</span></div>
+        <p class="spec-use">标题卡用极粗明朝体横向压缩到 0.84；正文走系统无衬线；标签用等宽大写。视觉稿用系统宋体 Black 临时代替，正式实现换思源宋体 900。</p>
+        <p class="font-demo demo-display display"><span class="squeeze">输入、输出。</span></p>
+        <p class="font-demo">正文：系统无衬线，17px，行高 1.85。</p>
+        <p class="font-demo hud">HUD LABEL / EP.012 / SYNC 87%</p>
+      </section>
+
+      <section class="spec" aria-labelledby="k3">
+        <div class="spec-head"><h3 class="spec-name" id="k3">同期率</h3><span class="spec-no hud">03</span></div>
+        <p class="spec-use">阅读进度条。走满后由紫转绿，右下角的读数同步变化。</p>
+        <div class="sync-sample"><span class="hud">32%</span><i class="sync-track"><b style="width:32%"></b></i></div>
+        <div class="sync-sample"><span class="hud">87%</span><i class="sync-track"><b style="width:87%"></b></i></div>
+        <div class="sync-sample is-done"><span class="hud">100%</span><i class="sync-track"><b style="width:100%"></b></i></div>
+      </section>
+
+      <section class="spec" aria-labelledby="k4">
+        <div class="spec-head"><h3 class="spec-name" id="k4">索敌框</h3><span class="spec-no hud">04</span></div>
+        <p class="spec-use">四角括标。列表行在悬停和键盘聚焦时锁定，代码块与配图常驻。</p>
+        <div class="lock-box lock is-locked"><span class="hud">TARGET LOCKED</span></div>
+      </section>
+
+      <section class="spec wide" aria-labelledby="k5">
+        <div class="spec-head"><h3 class="spec-name" id="k5">标题卡 · 两种极性</h3><span class="spec-no hud">05</span></div>
+        <p class="spec-use">切换主题等于把标题卡翻一面：昼间黑底白字，夜间白底黑字。红色编号随卡片极性取色，保证对比度。</p>
+        <div class="pol-grid">
+          <div class="title-card pol pol-dark">
+            <div class="tc-top hud"><span class="tc-ep">EP.00</span><span>昼间 / BLACK</span></div>
+            <p class="tc-title display"><span class="squeeze">输入<span class="punct">、</span>输出<span class="punct">。</span></span></p>
+            <div class="tc-foot"><span class="tc-no display">第 00 話</span></div>
+          </div>
+          <div class="title-card pol pol-light">
+            <div class="tc-top hud"><span class="tc-ep">EP.00</span><span>夜间 / WHITE</span></div>
+            <p class="tc-title display"><span class="squeeze">输入<span class="punct">、</span>输出<span class="punct">。</span></span></p>
+            <div class="tc-foot"><span class="tc-no display">第 00 話</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="spec wide" aria-labelledby="k6">
+        <div class="spec-head"><h3 class="spec-name" id="k6">话数列表 · 三种状态</h3><span class="spec-no hud">06</span></div>
+        <p class="spec-use">默认态、锁定态（悬停或聚焦时出现）、草稿态（黄底 DRAFT 标记）。</p>
+        <ol class="ep-list">
+          <li><a class="ep-row lock" href="#page-post" data-goto="post"><span class="ep-no hud">EP.012</span><time class="ep-date hud" datetime="2026-11-20">2026.11.20</time><span class="ep-title display"><span class="ep-name">用 Content Collections 给 Markdown 加类型</span></span><span class="ep-tags hud">#ASTRO</span></a></li>
+          <li><a class="ep-row lock is-locked" href="#page-post" data-goto="post"><span class="ep-no hud">EP.011</span><time class="ep-date hud" datetime="2026-11-14">2026.11.14</time><span class="ep-title display"><span class="ep-name">Astro Islands：什么时候该水合</span></span><span class="ep-tags hud">#ASTRO #VUE</span></a></li>
+          <li><a class="ep-row lock" href="#page-post" data-goto="post"><span class="ep-no hud">EP.007</span><span class="ep-date hud">—</span><span class="ep-title display"><span class="ep-name">CSS 变量怎么收进 Design Token</span><span class="badge">DRAFT</span></span><span class="ep-tags hud">#CSS</span></a></li>
+        </ol>
+      </section>
+
+      <section class="spec" aria-labelledby="k7">
+        <div class="spec-head"><h3 class="spec-name" id="k7">警示条与警告框</h3><span class="spec-no hud">07</span></div>
+        <p class="spec-use">黄黑斜纹做区块分隔，警告框用一条窄纹带引出。</p>
+        <div class="hazard-row" style="margin-top:0"><span class="hazard" aria-hidden="true"></span><span class="hud hazard-label">CAUTION / 立入禁止</span></div>
+        <aside class="callout" role="note" style="margin:0">
+          <span class="callout-bar" aria-hidden="true"></span>
+          <p><strong class="hud callout-label">WARNING</strong>这里是需要读者留意的提醒。</p>
+        </aside>
+      </section>
+
+      <section class="spec" aria-labelledby="k8">
+        <div class="spec-head"><h3 class="spec-name" id="k8">独白与终端</h3><span class="spec-no hud">08</span></div>
+        <p class="spec-use">引用块随主题翻面；代码块在两种主题下都保持深色。</p>
+        <figure class="monologue" style="margin:0">
+          <figcaption class="hud">MONOLOGUE / 独白</figcaption>
+          <p>引用的内容放在这里。</p>
+        </figure>
+        <figure class="term lock is-locked" style="margin:0">
+          <figcaption class="term-bar hud"><span class="term-path">MAGI://terminal</span><span class="term-lang">TS</span><button class="term-copy" type="button" data-copy aria-label="复制代码">COPY</button></figcaption>
+          <pre><code><span class="k">const</span> ratio = <span class="f">sync</span>(<span class="s">'reader'</span>);  <span class="c">// 同期率</span></code></pre>
+        </figure>
+      </section>
+
+      <section class="spec wide" aria-labelledby="k9">
+        <div class="spec-head"><h3 class="spec-name" id="k9">次回予告</h3><span class="spec-no hud">09</span></div>
+        <p class="spec-use">文末的「下一篇」。红色标签引出，悬停时箭头右移。</p>
+        <nav class="next-ep" aria-label="下一篇">
+          <a class="next-card" href="#page-post" data-goto="post">
+            <span class="next-label">次回予告</span>
+            <span class="next-body">
+              <span class="hud next-kicker">NEXT EPISODE · EP.011</span>
+              <span class="next-title display">Astro Islands：什么时候该水合</span>
+              <span class="next-desc">〈占位：下一篇的摘要。〉</span>
+            </span>
+            <span class="next-arrow" aria-hidden="true">→</span>
+          </a>
+        </nav>
+      </section>
+
+      <section class="spec wide" aria-labelledby="k10">
+        <div class="spec-head"><h3 class="spec-name" id="k10">EMERGENCY · 404</h3><span class="spec-no hud">10</span></div>
+        <p class="spec-use">红黑斜纹只留给系统状态：页面不存在、构建失败等。</p>
+        <div class="emergency">
+          <div class="emergency-inner">
+            <span class="hud emergency-alarm">EMERGENCY / 非常事态</span>
+            <p class="emergency-title display">TARGET NOT FOUND</p>
+            <p>你要找的那一话不存在，或者已经被移动。</p>
+            <p><a href="#page-home" data-goto="home">返回首页 →</a></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="spec wide" aria-labelledby="k11">
+        <div class="spec-head"><h3 class="spec-name" id="k11">状态栏</h3><span class="spec-no hud">11</span></div>
+        <p class="spec-use">页脚的一行等宽读数，EVA 味的最低成本来源。</p>
+        <div class="status-bar hud"><div class="status-inner"><span><span class="led" aria-hidden="true"></span>SYSTEM: ONLINE</span><span>MODE: SSG</span><span>RSS / SITEMAP / GITHUB</span></div></div>
+      </section>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- 页脚状态栏 -->
+<footer class="status-bar hud">
+  <div class="wrap status-inner">
+    <span><span class="led" aria-hidden="true"></span>SYSTEM: ONLINE</span>
+    <span>MODE: SSG</span>
+    <span>RSS / SITEMAP / GITHUB</span>
+  </div>
+</footer>
+
+<!-- 目标搜索浮层 -->
+<dialog class="search" id="search" aria-label="站内搜索">
+  <div class="search-head">
+    <span class="hud">TARGET SEARCH</span>
+    <input class="search-input" id="searchInput" type="text" placeholder="搜索标题或标签…" autocomplete="off" aria-label="搜索关键词" aria-controls="searchList">
+  </div>
+  <ol class="search-list" id="searchList"></ol>
+  <p class="search-empty" id="searchEmpty" role="status" hidden>没有命中目标。换个关键词试试。</p>
+</dialog>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var body = document.body;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ① 主题切换：昼/夜，标题卡随之翻面 */
+  var themeBtn = document.getElementById('themeToggle');
+  function applyTheme(t) {
+    var night = t === 'night';
+    root.setAttribute('data-theme', t);
+    themeBtn.setAttribute('aria-pressed', String(night));
+    themeBtn.textContent = night ? '昼' : '夜';
+    themeBtn.setAttribute('aria-label', night ? '切换到昼间模式' : '切换到夜间模式');
+  }
+  applyTheme(root.getAttribute('data-theme'));
+  themeBtn.addEventListener('click', function () {
+    applyTheme(root.getAttribute('data-theme') === 'night' ? 'day' : 'night');
+  });
+
+  /* ② 页面切换（视觉稿控制条），方向键可在页签间移动 */
+  var tablist = document.querySelector('.tabs');
+  var tabs = Array.prototype.slice.call(tablist.querySelectorAll('[role="tab"]'));
+  function show(i, focus) {
+    tabs.forEach(function (t, j) {
+      var on = j === i;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    body.setAttribute('data-page', tabs[i].id.replace('tab-', ''));
+    window.scrollTo(0, 0);
+    if (focus) tabs[i].focus();
+    updateSync();
+  }
+  function tabIndexByName(name) {
+    for (var i = 0; i < tabs.length; i++) if (tabs[i].id === 'tab-' + name) return i;
+    return -1;
+  }
+  tabs.forEach(function (t, i) { t.addEventListener('click', function () { show(i, false); }); });
+  tablist.addEventListener('keydown', function (e) {
+    if (e.key.indexOf('Arrow') !== 0) return;
+    var i = tabs.indexOf(document.activeElement);
+    if (i < 0) return;
+    e.preventDefault();
+    show((e.key === 'ArrowRight' || e.key === 'ArrowDown') ? (i + 1) % tabs.length : (i - 1 + tabs.length) % tabs.length, true);
+  });
+
+  /* ③ 站内跳转：列表行、次回予告、导航 → 对应页签（事件委托，搜索结果也走这里） */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-goto]');
+    if (!a) return;
+    e.preventDefault();
+    if (search.open) search.close();
+    show(tabIndexByName(a.getAttribute('data-goto')), false);
+    var anchor = a.getAttribute('data-anchor');
+    if (anchor) {
+      var el = document.getElementById(anchor);
+      el.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth' });
+    }
+  });
+
+  /* ④ 同期率：文章阅读进度 */
+  var article = document.getElementById('article');
+  var syncWrap = document.getElementById('syncWrap');
+  var syncBar = document.getElementById('syncBar');
+  var syncChip = document.getElementById('syncChip');
+  function updateSync() {
+    var r = article.getBoundingClientRect();
+    var total = r.height - window.innerHeight * 0.6;
+    var p = total > 0 ? (-r.top + window.innerHeight * 0.3) / total : 1;
+    p = Math.min(1, Math.max(0, p));
+    syncBar.style.width = (p * 100).toFixed(1) + '%';
+    syncChip.textContent = 'SYNC ' + String(Math.round(p * 100)).padStart(3, '0') + '%';
+    syncWrap.classList.toggle('is-done', p >= 1);
+  }
+  window.addEventListener('scroll', updateSync, { passive: true });
+  window.addEventListener('resize', updateSync);
+
+  /* ⑤ 目标索引：目录滚动高亮 + 平滑锚点 */
+  var tocLinks = Array.prototype.slice.call(document.querySelectorAll('.toc-list a[href^="#"]'));
+  tocLinks.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (!el) return;
+      e.preventDefault();
+      el.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth' });
+      el.setAttribute('tabindex', '-1');
+      el.focus({ preventScroll: true });
+    });
+  });
+  var heads = Array.prototype.slice.call(document.querySelectorAll('.post-body h2[id]'));
+  function setActive(id) {
+    tocLinks.forEach(function (a) { a.classList.toggle('is-active', a.getAttribute('href') === '#' + id); });
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) setActive(en.target.id); });
+    }, { rootMargin: '-20% 0px -65% 0px' });
+    heads.forEach(function (h) { io.observe(h); });
+  }
+  if (heads.length) setActive(heads[0].id);
+
+  /* ⑥ 标签筛选 */
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.chips .chip'));
+  var items = Array.prototype.slice.call(document.querySelectorAll('#homeList > li'));
+  var empty = document.getElementById('epEmpty');
+  chips.forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      chips.forEach(function (c) { c.setAttribute('aria-pressed', String(c === chip)); });
+      var tag = chip.getAttribute('data-tag');
+      var shown = 0;
+      items.forEach(function (li) {
+        var hit = tag === 'all' || (li.getAttribute('data-tags') || '').split(' ').indexOf(tag) !== -1;
+        li.hidden = !hit;
+        if (hit) shown++;
+      });
+      empty.hidden = shown !== 0;
+    });
+  });
+
+  /* ⑦ 目标搜索：站内搜索浮层（样例数据取自首页列表） */
+  var search = document.getElementById('search');
+  var input = document.getElementById('searchInput');
+  var list = document.getElementById('searchList');
+  var searchEmpty = document.getElementById('searchEmpty');
+  var posts = items.map(function (li) {
+    return {
+      no: li.querySelector('.ep-no').textContent,
+      title: li.querySelector('.ep-name').textContent,
+      tags: (li.getAttribute('data-tags') || '').split(' ').join(' #')
+    };
+  });
+  function render(q) {
+    var needle = q.toLowerCase();
+    var hit = posts.filter(function (p) { return (p.title + ' ' + p.tags).toLowerCase().indexOf(needle) !== -1; });
+    list.innerHTML = '';
+    hit.forEach(function (p) {
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.href = '#page-post';
+      a.setAttribute('data-goto', 'post');
+      var close = '</' + 'span>';
+      a.innerHTML = '<span class="ep-no hud">' + p.no + close + '<span>' + p.title + '<span class="hit-tags">#' + p.tags + close + close;
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+    list.hidden = hit.length === 0;
+    searchEmpty.hidden = hit.length !== 0;
+  }
+  function openSearch() {
+    if (!search.open) search.showModal();
+    input.value = '';
+    render('');
+    input.focus();
+  }
+  document.querySelector('.search-btn').addEventListener('click', openSearch);
+  document.addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openSearch(); }
+  });
+  input.addEventListener('input', function () { render(input.value.trim()); });
+  search.addEventListener('click', function (e) { if (e.target === search) search.close(); });
+  search.addEventListener('keydown', function (e) {
+    var links = list.querySelectorAll('a');
+    if (!links.length) return;
+    var i = Array.prototype.indexOf.call(links, document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); links[(i + 1) % links.length].focus(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); if (i <= 0) input.focus(); else links[i - 1].focus(); }
+  });
+
+  /* ⑧ 代码块复制按钮：成功与失败都有可见反馈，不静默吞掉 */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-copy]'), function (btn) {
+    var timer = 0;
+    function reset(cls, text) {
+      clearTimeout(timer);
+      btn.classList.remove('is-done');
+      btn.classList.remove('is-fail');
+      btn.classList.add(cls);
+      btn.textContent = text;
+      timer = setTimeout(function () {
+        btn.classList.remove(cls);
+        btn.textContent = 'COPY';
+      }, 1800);
+    }
+    btn.addEventListener('click', function () {
+      var code = btn.closest('.term').querySelector('pre code');
+      var lines = code.querySelectorAll('.line');
+      var text = lines.length
+        ? Array.prototype.map.call(lines, function (l) { return l.querySelector('.lc').textContent; }).join('\n')
+        : code.textContent;
+      function done() { reset('is-done', 'COPIED'); }
+      function fail() {
+        reset('is-fail', 'FAILED');
+        btn.title = '当前环境不允许访问剪贴板，请手动选择代码复制';
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fail);
+      else fail();
+    });
+  });
+
+  /* ⑨ 代码页签：同一命令的多个版本，方向键切换 */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-codegroup]'), function (group) {
+    var tabsIn = Array.prototype.slice.call(group.querySelectorAll('[role="tab"]'));
+    function select(i, focus) {
+      tabsIn.forEach(function (t, j) {
+        var on = j === i;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      });
+      if (focus) tabsIn[i].focus();
+    }
+    tabsIn.forEach(function (t, i) { t.addEventListener('click', function () { select(i, false); }); });
+    group.addEventListener('keydown', function (e) {
+      if (e.key.indexOf('Arrow') !== 0) return;
+      var i = tabsIn.indexOf(document.activeElement);
+      if (i < 0) return;
+      e.preventDefault();
+      select((e.key === 'ArrowRight' || e.key === 'ArrowDown') ? (i + 1) % tabsIn.length : (i - 1 + tabsIn.length) % tabsIn.length, true);
+    });
+  });
+
+  /* ⑩ 内嵌交互组件占位：同期率模拟器 */
+  var range = document.getElementById('islandRange');
+  var islandBar = document.getElementById('islandBar');
+  var islandVal = document.getElementById('islandVal');
+  range.addEventListener('input', function () {
+    islandBar.style.width = range.value + '%';
+    islandVal.textContent = 'SYNC ' + String(range.value).padStart(3, '0') + '%';
+    range.setAttribute('aria-valuetext', '同期率 ' + range.value + '%');
+  });
+
+  updateSync();
+})();
+</script>
+</body>
+</html>

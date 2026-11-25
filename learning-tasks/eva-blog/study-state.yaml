@@ -1,0 +1,97 @@
+topic: "EVA 风格个人技术博客实战 (eva-blog)"
+final_goal: "在 learning-tasks/eva-blog/ 下手写交付基于 Astro 7 的 EVA 战术终端风格个人技术博客，具备昼夜翻面、MAGI 深色代码与图表面板、同期率进度、Pagefind 离线检索与 GitHub Actions 自动发布能力"
+daily_budget_min: 60
+explicit_cut_list:
+  - "本期明确跳过自建后端服务、登录认证与数据库体系，坚持纯静态站点"
+  - "本期明确跳过阅读量、点赞统计等动态数据打点"
+  - "本期明确跳过 Tailwind 等原子类 CSS 框架，恪守纯原生 CSS 变量系统"
+  - "本期明确跳过商业字体 Matisse EB，全站标题卡统一采用开源免费的思源宋体 Heavy/Black"
+  - "本期明确跳过自建评论管理系统，评论完全委托给 Giscus (GitHub Discussions)"
+nodes:
+  - id: "N1"
+    title: "【架构设计与样式契约】Design Tokens、Markdown 元素与 EVA 视觉母题映射规范"
+    stage: "fundamentals"
+    prereqs: []
+    status: "ready"
+    difficulty: "medium"
+    observable_output: "产出完整的《EVA 博客样式与渲染架构规范文档》，严格定义昼夜两套 CSS Token 契约、Markdown 各级 HTML 元素与 EVA 母题映射表，以及组件 Props 边界"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N2"
+    title: "【脚手架与渲染探针】Astro 7 + Unified + 复杂 Markdown/KaTeX/Code 渲染 Spike"
+    stage: "fundamentals"
+    prereqs: ["N1"]
+    status: "locked"
+    difficulty: "high"
+    observable_output: "初始化 Astro 7 工程骨架，配置 Unified 处理器，验证 remark-math + rehype-katex、astro-expressive-code、rehype-github-alerts 协同工作，探针页面 pnpm build 退出码为 0"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N3"
+    title: "【布局与昼夜切换】无闪烁 Head 脚本、BaseLayout、ThemeToggle 与导航系统"
+    stage: "fundamentals"
+    prereqs: ["N1"]
+    status: "locked"
+    difficulty: "medium"
+    observable_output: "实现 BaseLayout.astro 与 ThemeToggle.astro，并在 head 中内联防白屏闪烁脚本，刷新或切换昼夜模式时标题卡与全站主题平滑翻面，键盘 Tab 可完整遍历导航"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N4"
+    title: "【内容架构与契约校验】Content Layer、Frontmatter Zod 约束与全元素测试文章"
+    stage: "building_blocks"
+    prereqs: ["N2"]
+    status: "locked"
+    difficulty: "medium"
+    observable_output: "编写 src/content.config.ts，对 episode、tags、draft 进行 Zod 校验，创建包含公式、代码、警示框的全元素 Markdown 样例文档，当字段违规时 pnpm check 精准报错"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N5"
+    title: "【文章页核心交互】TitleCard 标题卡、MAGI 终端样式、TOC 吸顶目录与同期率进度"
+    stage: "building_blocks"
+    prereqs: ["N3", "N4"]
+    status: "locked"
+    difficulty: "high"
+    observable_output: "交付 /blog/[slug].astro 路由、TitleCard.astro、Toc.astro 与 SyncRate.astro。实现目录吸顶高亮联动，页面滚动时同期率读数与进度线实时同步更新"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N6"
+    title: "【扩展能力与交互增强】次回予告、astro-mermaid 恒深色图表与内嵌 Vue 交互组件"
+    stage: "building_blocks"
+    prereqs: ["N5"]
+    status: "locked"
+    difficulty: "high"
+    observable_output: "接入 astro-mermaid 并在日夜模式下恒深色渲染流程图，集成 @astrojs/vue 与 @astrojs/mdx，在正文中无缝渲染响应式 Vue 交互组件，文章底部渲染下一话次回予告"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N7"
+    title: "【聚合看板与离线检索】首页话数索引列表、标签聚合页与 Pagefind 中文分词"
+    stage: "building_blocks"
+    prereqs: ["N5"]
+    status: "locked"
+    difficulty: "medium"
+    observable_output: "交付首页按发布日期倒序的话数看板与 /tags/[tag] 聚合路由；配置 Pagefind 中文分词离线检索并在 SearchDialog.astro 中实现毫秒级快速匹配与高亮"
+    weak_points: []
+    review_stage: 0
+    next_review: null
+
+  - id: "N8"
+    title: "【交付闭环与自动发布】RSS、Sitemap、EMERGENCY 404 与 GitHub Pages 部署流"
+    stage: "real_application"
+    prereqs: ["N6", "N7"]
+    status: "locked"
+    difficulty: "medium"
+    observable_output: "配置 @astrojs/rss 与 sitemap，实现红黑警戒斜纹 404 页面，配置 .github/workflows/deploy.yml，实现推送 main 分支自动构建并部署至 GitHub Pages"
+    weak_points: []
+    review_stage: 0
+    next_review: null
